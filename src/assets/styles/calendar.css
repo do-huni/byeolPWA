@@ -1,0 +1,77 @@
+.cell{
+	border: 0.4px solid #c4c4c4;
+    /* margin: 0.3% 0 0 0.3%; */
+	min-width: 0;
+	border-radius: 3px;
+	font-size: 0.8em;	
+	aspect-ratio: 4 / 4;
+	padding: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.done{
+	text-decoration: line-through;
+}
+svg{
+	margin-left: 6%;		
+}
+.nomarginleft{
+	margin-left: 0;
+	margin: 0 auto;
+}
+.not-valid {
+	color: #c4c4c4;
+}
+.selected{
+	background: #f3c5b6;
+	color: #aa5b42;
+	font-weight: 600;	
+}
+.col-start{
+	/* width: 80%; */
+	text-align: left;
+}
+
+/* .col-end{
+	width: 20%;
+} */
+
+.textYear{
+    font-size: 0.8em;	
+}
+
+.text.month {
+	/* margin-right: 0.3%; */
+	font-size: 1.6em;
+	font-weight: 600;
+}
+
+.days{
+	flex-wrap: nowrap;
+	flex: 1 1 auto;
+	min-width: 0;
+	font-size: 0.8em;
+	text-align: center;
+}
+.date{
+	/* margin: 0 0 0 0.3%; */
+	flex: auto;
+	min-width: 0;
+	background: #ebcfc6;
+	border-radius: 10px;
+	color: #686868;
+}
+.body{
+	position: relative;
+}
+.body::before{
+	content: "";
+	position: absolute;
+	background-image: url("./logo_copy0.png");	
+	opacity: 0.1;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;	
+    background-size: cover;		
+}
