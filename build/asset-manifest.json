@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.5d73a23d.css",
-    "main.js": "/static/js/main.809006de.js",
-    "static/js/787.50cf410d.chunk.js": "/static/js/787.50cf410d.chunk.js",
-    "static/media/logo_copy0.png": "/static/media/logo_copy0.67a7390d36722d1a8f1b.png",
-    "service-worker.js": "/service-worker.js",
-    "index.html": "/index.html",
-    "main.5d73a23d.css.map": "/static/css/main.5d73a23d.css.map",
-    "main.809006de.js.map": "/static/js/main.809006de.js.map",
-    "787.50cf410d.chunk.js.map": "/static/js/787.50cf410d.chunk.js.map"
+    "main.css": "/byeolPWA/static/css/main.fcf6d8c0.css",
+    "main.js": "/byeolPWA/static/js/main.fa1408a8.js",
+    "static/js/787.50cf410d.chunk.js": "/byeolPWA/static/js/787.50cf410d.chunk.js",
+    "static/media/logo_copy0.png": "/byeolPWA/static/media/logo_copy0.67a7390d36722d1a8f1b.png",
+    "service-worker.js": "/byeolPWA/service-worker.js",
+    "index.html": "/byeolPWA/index.html",
+    "main.fcf6d8c0.css.map": "/byeolPWA/static/css/main.fcf6d8c0.css.map",
+    "main.fa1408a8.js.map": "/byeolPWA/static/js/main.fa1408a8.js.map",
+    "787.50cf410d.chunk.js.map": "/byeolPWA/static/js/787.50cf410d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5d73a23d.css",
-    "static/js/main.809006de.js"
+    "static/css/main.fcf6d8c0.css",
+    "static/js/main.fa1408a8.js"
   ]
 }
