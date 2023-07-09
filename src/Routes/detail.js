@@ -19,7 +19,8 @@ import { format } from "date-fns";
 import { ko } from "date-fns/esm/locale";
 import { BsFillTrashFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
+import "../assets/styles/quillbubble.css"
 
 function Detail(){
     const dispatch = useDispatch();	
@@ -36,7 +37,9 @@ function Detail(){
 	let id = useParams().id;	
   	let posts = useSelector((state)=>state.posts)	
 	
-	
+const modules = {
+      toolbar: false
+}	
   useEffect(()=>{		 
 	byeolDB.getAll(true).then((result) => dispatch(update(result)));
 	byeolDB.getAll(false).then((result)=>{
@@ -106,9 +109,18 @@ function Detail(){
 		<Container style = {{"margin": "10px auto"}}>
 			<Row><span className = {"postClass"}>#{clName}</span></Row>
 			<Row><div className = {"postTitle"}>{title}</div></Row>
-			<Row style = {{"borderBottom":"1px rgba(0,0,0,0.2) solid"}}><div className = {"postDate"}>{date}</div></Row>
+			<Row><div className = {"postDate"}>{date}</div></Row>
 			
-			<div style = {{textAlign: "left"}} dangerouslySetInnerHTML = 	{{__html:content}}/>
+			
+			<ReactQuill
+				style = {
+					{border: "none"}
+				}
+				readOnly
+				theme="bubble"
+				value={content}
+		 		modules = {modules}				
+			/>			
 			<Container id = "todoContainer">
 				<Row style = {{fontSize: "18pt", fontWeight: "900", margin: "10px 0", textAlign: "left"}}><Col><BiCalendarCheck style = {{marginLeft: 0}}/>TodoList</Col></Row>
 			<Container id = "clstContainer">
@@ -129,14 +141,17 @@ function Detail(){
 										  document.getElementById("todoInput").value = "";
 										  setReload(reload+1);				          	  
 						  })
-					  }}>put</Button>						
+					  }}>추가</Button>						
 				</InputGroup>
 			</Container>				
-			<Button variant="dark" size="lg" onClick = {() => navigate(`/update/${clName}/${id}`)}>edit</Button>
+			<Button variant="primary" size="lg" style = {{margin: "5px"}} onClick = {() => navigate(`/update/${clName}/${id}`)}>수정하기</Button>
 			
-			<Button variant="dark" size="lg" onClick = {()=>{
-					  byeolDB.deleteItem(clName,id,	() => {navigate('/')})  
-				  }}>delete</Button>				
+			<Button variant="dark" size="lg" style = {{margin: "5px"}} onClick = {()=>{
+  					  var ans = window.confirm("삭제 하시겠습니까?");
+					  if(ans){
+					  	byeolDB.deleteItem(clName,id,	() => {navigate('/')})  						 											  
+					  }
+				  }}>삭제하기</Button>				
 		</Container>
 		
 	)

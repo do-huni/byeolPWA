@@ -10,6 +10,11 @@ import Post from './Routes/Post.js';
 import Detail from './Routes/detail.js'
 import Calendar from './Routes/Calendar.js';
 import Update from './Routes/Update.js';
+import Diary from './Routes/Diary.js';
+import DPost from './Routes/DPost.js';
+import DDetail from './Routes/DDetail.js';
+import DUpdate from './Routes/DUpdate.js';
+
 //import bootstrap component
 import Container from 'react-bootstrap/Container';
 
@@ -37,6 +42,18 @@ function App() {
 		<Route path = "/calender" element = {
 				<Calendar/>
 			}/>		
+		<Route path = "/diary" element = {
+				<Diary/>
+			}/>				
+		<Route path = "/diary/post" element = {
+				<DPost/>
+			}/>		
+		<Route path = "/diary/:id" element = {
+				<DDetail/>
+			}/>		
+		<Route path = "/diary/update/:id" element = {
+				<DUpdate/>
+			}/>				
 	</Routes>
 </Container>
 </div>

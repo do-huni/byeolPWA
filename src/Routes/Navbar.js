@@ -19,8 +19,10 @@ function Navbars(){
             />{' '}
 		  </Navbar.Brand>			
           <Nav className="me-auto">
-            <Nav.Link onClick={()=>navigate('/post')}>post</Nav.Link>
-          </Nav>
+            <Nav.Link onClick={()=>navigate('/post')}>post</Nav.Link>			  
+            <Nav.Link onClick={()=>navigate('/diary')}>diary</Nav.Link>
+          </Nav>		
+		
         </Container>
       </Navbar>	
 </>

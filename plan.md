@@ -20,6 +20,7 @@ git commit -am 'Add homepage'
 git push origin master
 git subtree push --prefix build/ origin gh-pages
 
+https://h-owo-ld.tistory.com/100
 https://sennieworld.tistory.com/61
 
 0.NavBar
@@ -51,11 +52,18 @@ https://sennieworld.tistory.com/61
 [글] v
 [투두리스트]
 
+4. Diary 페이지
+
+
+
+
+
 ===
 DB = indexedDB
 
 DB구조
 byeolDB
+
 1. objectStore: post
 스키마
 key: 분류 이름
@@ -137,3 +145,20 @@ unique
 access - todoID
 unique
 ++
+
+4. diaryStore
+
+스키마
+{
+hook: "2022.08",
+list: [
+	{
+		id: id
+		emotion: emotion
+		content: content
+		date: date
+	}
+]
+}
+
+# addDiary

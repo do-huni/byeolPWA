@@ -1,5 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit'
 import * as byeolDB from './Script/indexedDB.js'
+import { sub, format, add } from "date-fns";
 
 let posts = createSlice({
 	name: 'posts',
@@ -49,14 +50,61 @@ let postList = createSlice({
 		}
 	}
 })
+
+let diaryList = createSlice({
+	name: "diaryList",
+	initialState: [
+	{
+	id: 0,
+	emotion: 0,
+	content: "일기 내용",
+	date: "2001.12.10"
+	},
+	{
+	id: 1,
+	emotion: 0,
+	content: "일기 내용",
+	date: "2001.07.15"
+	}		
+],
+	reducers:{
+		updateDiaryList(state, action){
+			let returnVal = action.payload;
+			return returnVal			
+		}
+	}
+})
+
+let diaryDate = createSlice({
+	name: "diaryDate",
+	initialState: format(new Date(), "yyyy.MM"),
+	reducers:{
+		edit(state, action){
+			let copy = new Date(state);
+			if (action.payload.ifminus){
+				return format(sub(copy, {
+					months: 1
+				}),"yyyy.MM")
+			} else{
+				return format(add(copy, {
+					months: 1
+				}),"yyyy.MM")	
+			}
+		}
+	}	
+})
 export let {update} = postList.actions;
 export let {updatePosts} = posts.actions;
 export let {updateTodos} = todos.actions;
+export let {edit} = diaryDate.actions;
+export let {updateDiaryList} = diaryList.actions;
 
 export default configureStore({
   reducer: {
 	  postList: postList.reducer,
 	  posts: posts.reducer,
-	  todos: todos.reducer
+	  todos: todos.reducer,
+	  diaryList: diaryList.reducer,
+	  diaryDate: diaryDate.reducer
   }
 }) 

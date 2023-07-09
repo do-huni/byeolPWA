@@ -53,7 +53,6 @@ function Lists() {
 						  <td rowSpan = {i.lists.length} style ={{verticalAlign : "middle"}}>
 							  <div style = {{background: i.color, width: "14px", height: "14px", display: "inline-block", borderRadius: "5px" , verticalAlign: "middle"}}>&nbsp;</div>
 							  {i.clName}
-							  <div style = {{width: "14px", height: "14px", display: "inline-block", borderRadius: "5px" , verticalAlign: "middle"}}>&nbsp;</div>							  
 							  </td>
 						  <td>{i.lists[j].title}</td>
 					  </tr>						  

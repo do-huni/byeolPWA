@@ -14,7 +14,9 @@ img{
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+.input-group .btn{
+	z-index: 0;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -89,7 +91,7 @@ pre{
   font-display: row;
   justify-content: space-between;
   align-items: center;
-  width: 100px !important
+  width: 100px
 }
 
 .form-check-input{
@@ -112,4 +114,115 @@ pre{
 }
 #todoContainer{
 	border: 1px solid rgba(0,0,0,0.2);
+	margin: 10px auto;
+	border-radius: 10px;
+}
+
+.rowColor{
+	vertical-align : middle;
+	text-align: center;
+	width: 14px;
+	height: 14px;
+	display: inline-flex;
+	border-radius: 5px;
+}
+
+
+/* DiaryItem */
+.DiaryItem {
+  padding: 15px 0;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;	
+  display: flex;
+  justify-content: space-between;
+}
+#diaryContainer > div:last-child{
+  border-bottom: 1px solid #ccc;
+}
+.modalss .DiaryItem{
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-content: center;	
+	justify-content: center;	
+}
+.DiaryItem .emotion_img_wrapper {
+  cursor: pointer;
+  min-width: 20dvh;
+  max-width: 20dvh;
+  min-height: 20dvh;
+  max-height: 20dvh;
+  display: flex;
+  justify-content: center;
+  margin-left: 10px;
+}
+.DiaryItem .emotion_img_wrapper img{
+  border-radius: 5px;
+}
+.DiaryItem .info_wrapper {
+  flex-grow: 1;
+  margin-left: 10px;
+  cursor: pointer;
+  min-width: 0;
+  max-height: 20dvh;
+  overflow: auto;
+  margin-right: 10px
+}
+
+.DiaryItem .diary_date {
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.emotion_list_wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 2%;
+}
+
+/* EmotionItem */
+
+.EmotionItem {
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 10px 0;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.EmotionItem img {
+  margin-bottom: 10px;
+  border-radius: 5px;	
+}
+
+.EmotionItem span {
+  font-size: 18px;
+}
+
+#emoSelect{
+	border: 1px solid #ccc;
+	margin: 10px 0;
+	overflow: auto;
+	height: 40dvh;
+}
+
+.EmotionItem_on{
+	background: #ccc;
+	opacity: 0.7;
+}
+.ioDP{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;	
+}
+.ioDP .react-datepicker-wrapper{
+	width: 100% !important;
 }
