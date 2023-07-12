@@ -599,7 +599,6 @@ export function getDiary(hook){
 	const dbReq = indexedDB.open('byeolDB',1)
 	dbReq.addEventListener("success", function(event){
 	const db = event.target.result;		
-	let idStore = db.transaction("id", "readwrite").objectStore("id")
 		const diaryReadStore = db.transaction("diary", "readwrite").objectStore('diary');			
 		const readReq = diaryReadStore.get(hook)
 		readReq.addEventListener('success', function(e2){		

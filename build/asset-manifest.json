@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/byeolPWA/static/css/main.cb5fa0aa.css",
-    "main.js": "/byeolPWA/static/js/main.6f35fd10.js",
+    "main.css": "/byeolPWA/static/css/main.8ffa7e88.css",
+    "main.js": "/byeolPWA/static/js/main.5ba63368.js",
     "static/js/787.50cf410d.chunk.js": "/byeolPWA/static/js/787.50cf410d.chunk.js",
     "static/media/logo_copy0.png": "/byeolPWA/static/media/logo_copy0.67a7390d36722d1a8f1b.png",
     "service-worker.js": "/byeolPWA/service-worker.js",
     "index.html": "/byeolPWA/index.html",
-    "main.cb5fa0aa.css.map": "/byeolPWA/static/css/main.cb5fa0aa.css.map",
-    "main.6f35fd10.js.map": "/byeolPWA/static/js/main.6f35fd10.js.map",
+    "main.8ffa7e88.css.map": "/byeolPWA/static/css/main.8ffa7e88.css.map",
+    "main.5ba63368.js.map": "/byeolPWA/static/js/main.5ba63368.js.map",
     "787.50cf410d.chunk.js.map": "/byeolPWA/static/js/787.50cf410d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cb5fa0aa.css",
-    "static/js/main.6f35fd10.js"
+    "static/css/main.8ffa7e88.css",
+    "static/js/main.5ba63368.js"
   ]
 }

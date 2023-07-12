@@ -24,17 +24,19 @@ function DList() {
   useEffect(()=>{
 	  byeolDB.getDiary(diaryDate).then((result)=>{
 // 		  result를 sorting?
-		  result = result.sort((a,b)=>{
-			  let aD = new Date(a.date);
-			  let bD = new Date(b.date);
-			  if(aD > bD){
-				  return -1
-			  }
-			  if(aD < bD){
-				  return 1
-			  }
-			  return 0;
-		  })
+		  if(result != []){
+			  result = result.sort((a,b)=>{
+				  let aD = new Date(a.date);
+				  let bD = new Date(b.date);
+				  if(aD > bD){
+					  return -1
+				  }
+				  if(aD < bD){
+					  return 1
+				  }
+				  return 0;
+			  })			  
+		  }
 		  dispatch(updateDiaryList(result))
 	  })
   },[diaryDate])

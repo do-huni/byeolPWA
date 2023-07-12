@@ -279,6 +279,8 @@ const Calendar = () => {
 	  
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
+	const [modalOpen, setModalOpen] = useState(false);	
+	const [counter, setCounter] = useState(0);
 	
     const prevMonth = () => {
         setCurrentMonth(subMonths(currentMonth, 1));
@@ -301,8 +303,32 @@ const Calendar = () => {
 					selectedDate={selectedDate}
 				/>				
 			</Container>									
+			<div className='dDay dDayRow'>오랑한 지 <span className='dDay1' onClick={()=>{setCounter(counter +1);
+																					  if(counter==5){
+																						setModalOpen(true)
+																					  }
+																					  }}>{Math.ceil(	(dDay.getTime()-selectedDate.getTime()) / (1000*60*60*-24))}</span> 일 째</div>
 			
-			<div className='dDay dDayRow'>오랑한 지 <span className='dDay1'>{Math.ceil(	(dDay.getTime()-selectedDate.getTime()) / (1000*60*60*-24))}</span> 일 째</div>
+			
+		  <Modal isOpen={modalOpen}
+    			onRequestClose={()=>setModalOpen(false)}			  
+    			ariaHideApp={false}	
+			  	style = {
+				{overlay: {zIndex: 1000}}
+			}>
+			<Container>
+				<div className = "letter" style ={{fontSize: "20pt", fontWeight: "900"}}>한별이에게</div>
+				<p className = "letter"> &nbsp;안녕 한별누나! 스물한살 도훈이야. 스물 둘을 두번이나 축하해줄 수 있다니 영광이야! 작년 스물 둘 챙겨준 게 입대 두달 전이었는데.. 어느덧 시간이 흘러흘러 이렇게 또 별이 생일을 챙겨주고 있네요. ㅎㅎ 영광입니다!
+				<br></br><br></br> &nbsp;스무살 때부터 항상 같이 붙어있다보니 잘 몰랐는데, 타인에게 무언가를 바라고 받는다는 게 참으로 어려운 일인 거 같아. 한별이를 볼 수 없는 일상 속에서,
+					새로운 사람들을 오랜만에 만나보니까, 인간관계라는게 참 일방향적이다 싶더라구.
+					각자가 바라는 것과 해줄 수 있는 것들도 너무 다르고 다양하고 서로를 향한 생각도 너무나도 다르고, 그걸 또 알게 돼버리니까 사람들한테 딱히 무언갈 기대하지 않게 되더라.<br></br><br></br>
+					&nbsp;근데 신기한게 이렇게 회의회의 한 상태로 너한테 전화를 하면, 갑자기 이런거 다 까먹고 오오옳 홀롤롤로로 바보소리만 내고 있더라? 웃기징. 아까까진 잔뜩 무게잡고 인생 독고다이 이러고 있었는데 말야.
+					너랑 전화하는 순간 혼자 있을 때 보다 더 더 짐을 내려놓는 거 같아. <br></br><br></br>
+					&nbsp;여보의 바보짓에 까스라이팅 됐나..? 한별이 앞에만 가면 온갖 벽들이 다 무너져. 실컷 애교도 부리고 싶고 사랑도 해주고 싶고 어떨 땐 그냥 사랑 실컷 받고도 싶고 그래. 딴 사람한테는 잘 안그러는 데, 왜 한별이 앞에만 서면 하고싶은 게 많아지지?
+					너랑 이것도 저것도 같이 하고싶고, 한별이가 좋아할 만한 건 다 해주고싶고, 그리고 실컷 예쁨도 받고 싶고. 자꾸 너랑 함께 있는 미래를 기대하게 돼. 찐오랑인듯.
+				<br></br><br></br> &nbsp;내 오롱롱랑랑랑아!! 내 여보 내 동반자야! 앞으로도 내 영원히 사랑할게요. 그니까 백살 천살 만살까지 나랑 함께해죠!</p>
+			</Container>								
+		  </Modal>					
         </div>
     );
 };

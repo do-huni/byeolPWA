@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+
 .App {
+  touch-action: pan-y;	
   text-align: center;
 }
 
@@ -225,4 +228,13 @@ pre{
 }
 .ioDP .react-datepicker-wrapper{
 	width: 100% !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    --bs-table-color-type: inherit;
+    --bs-table-bg-type: inherit;
+}
+.letter{
+	font-family: 'Nanum Pen Script', cursive;
+	font-size: 16pt;
 }
