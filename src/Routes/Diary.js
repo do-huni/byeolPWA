@@ -29,7 +29,7 @@ return (
 				{borderBottom: "1px solid #ccc",
 				margin: "0 0 10px 0",
 				padding: "10px",
-				fontSize: "1.5rem"}
+				fontSize: "1.2rem"}
 			}>
 			<Col onClick={()=>{					
 					dispatch(edit({ifminus: true}));

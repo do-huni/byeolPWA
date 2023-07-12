@@ -66,9 +66,9 @@ const modules = {
     <Form>	
 	
       <div className="d-grid gap-2">	 		  
-      	<Button variant="dark" size="lg" onClick = {()=>{
+      	<Button variant="dark" size="lg" style ={{margin: "10px 0"}} onClick = {()=>{
 				  byeolDB.editItem(clName,title,value, id, ()=>{navigate(`/detail/${clName}/${id}`)})
-			  }}>edit</Button>		  
+			  }}>수정하기</Button>		  
 	  </div>
     </Form>
 </Container>		  

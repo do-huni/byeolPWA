@@ -14,7 +14,7 @@ const DiaryItem = ({ id, emotion, content, date }) => {
 	}	
   	let diaryDate = useSelector((state) => state.diaryDate);  	
     const navigate = useNavigate();
-    const strDate = format(new Date(date), "yyyy.MM.dd")
+    const strDate = format(new Date(date), "yyyy-MM-dd")
     const goDetail = () => {
         navigate(`/diary/${id}`);
     }

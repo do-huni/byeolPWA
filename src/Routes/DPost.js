@@ -95,7 +95,7 @@ const modules = {
 		onChange={date => setDate(date)}
 		className = "shadow-none form-control col-md-auto"
 		locale={ko}
-		dateFormat="yyyy.MM.dd"										
+		dateFormat="yyyy-MM-dd"										
 		/>	
 	</div>
 	<Row><Col>오늘의 감정</Col></Row>
@@ -121,7 +121,7 @@ const modules = {
 	
       <div className="d-grid gap-2">	 
 	<Button variant="dark" size="lg" style ={{margin: "10px 0"}} onClick ={()=>{
-			byeolDB.addDiary(format(date, "yyyy.MM"), format(date,"yyyy.MM.dd"), emotion, value, ()=>{
+			byeolDB.addDiary(format(date, "yyyy-MM"), format(date,"yyyy-MM-dd"), emotion, value, ()=>{
 				navigate(`/diary`)
 			})}}
 		>작성하기</Button>			  

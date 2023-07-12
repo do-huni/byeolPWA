@@ -58,13 +58,13 @@ let diaryList = createSlice({
 	id: 0,
 	emotion: 0,
 	content: "일기 내용",
-	date: "2001.12.10"
+	date: "2001-12-10"
 	},
 	{
 	id: 1,
 	emotion: 0,
 	content: "일기 내용",
-	date: "2001.07.15"
+	date: "2001-07-15"
 	}		
 ],
 	reducers:{
@@ -77,18 +77,18 @@ let diaryList = createSlice({
 
 let diaryDate = createSlice({
 	name: "diaryDate",
-	initialState: format(new Date(), "yyyy.MM"),
+	initialState: format(new Date(), "yyyy-MM"),
 	reducers:{
 		edit(state, action){
 			let copy = new Date(state);
 			if (action.payload.ifminus){
 				return format(sub(copy, {
 					months: 1
-				}),"yyyy.MM")
+				}),"yyyy-MM")
 			} else{
 				return format(add(copy, {
 					months: 1
-				}),"yyyy.MM")	
+				}),"yyyy-MM")	
 			}
 		}
 	}	

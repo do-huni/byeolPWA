@@ -71,7 +71,7 @@ const RenderCells = ({ currentMonth, selectedDate }) => {
     let diaryList = useSelector((state) => state.diaryList);	
 	
 	useEffect(()=>{
-	  byeolDB.getDiary(format(currentMonth, "yyyy.MM")).then((result)=>{
+	  byeolDB.getDiary(format(currentMonth, "yyyy-MM")).then((result)=>{
 		  dispatch(updateDiaryList(result.filter(i=> (new Date(i.date)).getDate() == clickedDate)));		
 	  })
 	},[clickedDate])

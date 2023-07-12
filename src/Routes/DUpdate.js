@@ -105,7 +105,7 @@ const modules = {
 		onChange={date => setDate(date)}
 		className = "shadow-none form-control col-md-auto"
 		locale={ko}
-		dateFormat="yyyy.MM.dd"		
+		dateFormat="yyyy-MM-dd"		
 		readOnly = {true}
 		/>	
 	</div>
