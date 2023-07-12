@@ -13,7 +13,7 @@ function Navbars(){
             <img
               alt=""
               src= {process.env.PUBLIC_URL +"/img/427111LogoCut.png"}
-              width = "120dvh"
+              width = "80dvh"
 			  height = "30dvh"
               className="d-inline-block align-top"
             />{' '}
