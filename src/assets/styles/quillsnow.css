@@ -4,6 +4,10 @@
  * Copyright (c) 2014, Jason Chen
  * Copyright (c) 2013, salesforce.com
  */
+[contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+}
 .ql-container {
   box-sizing: border-box;
   font-family: Helvetica, Arial, sans-serif;

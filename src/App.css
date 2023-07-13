@@ -10,8 +10,7 @@
   pointer-events: none;
 }
 img{
-	width: 50%;
-	height: 50%;
+	width: 100%;
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

@@ -133,10 +133,10 @@ const modules = {
 	
       <div className="d-grid gap-2">	 
 	<Button variant="dark" size="lg" style ={{margin: "10px 0"}} onClick ={()=>{
-			byeolDB.editDiary(format(date, "yyyy.MM"),id, value, format(date,"yyyy.MM.dd"), emotion, ()=>{
+			byeolDB.editDiary(format(date, "yyyy-MM"),id, value, format(date,"yyyy-MM-dd"), emotion, ()=>{
 				navigate(`/diary`)
 			})}}
-		>작성하기</Button>			  
+		>수정하기</Button>			  
 	  </div>	  
 </Container>		  
 	</>
