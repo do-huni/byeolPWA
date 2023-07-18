@@ -55,7 +55,37 @@ const emotionList = [
         emotion_id: 6,
         emotion_img: process.env.PUBLIC_URL + `/img/img6.png`,
         emotion_descript: "자러간다"
-    }	
+    },
+    {
+        emotion_id: 7,
+        emotion_img: process.env.PUBLIC_URL + `/img/img7.png`,
+        emotion_descript: "GANG~!"
+    },
+    {
+        emotion_id: 8,
+        emotion_img: process.env.PUBLIC_URL + `/img/img8.png`,
+        emotion_descript: "꼬시기"
+    },
+    {
+        emotion_id: 9,
+        emotion_img: process.env.PUBLIC_URL + `/img/img9.png`,
+        emotion_descript: "예쁜 짓!"
+    },
+    {
+        emotion_id: 10,
+        emotion_img: process.env.PUBLIC_URL + `/img/img10.png`,
+        emotion_descript: "무운어어~"
+    },
+    {
+        emotion_id: 11,
+        emotion_img: process.env.PUBLIC_URL + `/img/img11.png`,
+        emotion_descript: "진지함."
+    },
+    {
+        emotion_id: 12,
+        emotion_img: process.env.PUBLIC_URL + `/img/img12.png`,
+        emotion_descript: "쀼>_<"
+    }		
 ]	
 
 
