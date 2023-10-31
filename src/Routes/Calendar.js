@@ -20,6 +20,7 @@ import {update, updatePosts, updateTodos, updateDiaryList} from "../store.js"
 import Modal from 'react-modal';
 import DiaryItem from './DiaryItem.js';
 import '../App.css';
+import Loading from './Loading.js';
 
 
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
@@ -89,7 +90,7 @@ const RenderCells = ({ currentMonth, selectedDate }) => {
 				for(let j of i.lists){
 					for(let q of j.todos){
 						let todayObj = new Date(q.dueDate);
-						console.log(curMonth, todayObj.getMonth())
+						// console.log(curMonth, todayObj.getMonth())
 						if(curMonth === todayObj.getMonth()){
 							let todayDate = todayObj.getDate()
 							if(!copy[todayDate]){
@@ -210,7 +211,7 @@ const RenderCells = ({ currentMonth, selectedDate }) => {
 					}
 					onClick = {(e)=>{					
 						if(e.currentTarget.id != "nope"){							
-							console.log(dayList[e.currentTarget.id])
+							// console.log(dayList[e.currentTarget.id])
 							setClickedDate(parseInt(e.currentTarget.id))
 							setModalIsOpen(true)
 						}
@@ -244,7 +245,9 @@ const RenderCells = ({ currentMonth, selectedDate }) => {
         );
         days = [];
     }
-    return <div className="body">{rows}
+    return (
+	  	  <>
+		<div className="body">{rows}
 		
 		  <Modal isOpen={modalIsOpen}
     			onRequestClose={()=>setModalIsOpen(false)}			  
@@ -270,7 +273,9 @@ const RenderCells = ({ currentMonth, selectedDate }) => {
 			</Container>								
 		  </Modal>			
 					
-	</div>;
+	</div>
+	</>
+);
 };
 
 
@@ -281,7 +286,6 @@ const Calendar = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
 	const [modalOpen, setModalOpen] = useState(false);	
 	const [counter, setCounter] = useState(0);
-	
     const prevMonth = () => {
         setCurrentMonth(subMonths(currentMonth, 1));
     };
@@ -290,6 +294,7 @@ const Calendar = () => {
     };
 	let dDay = new Date(2020,10,18)
     return (
+		<>
         <div className="calendar" style = {{"margin": "5px 4px 5px 0px"}}>
             <RenderHeader
                 currentMonth={currentMonth}
@@ -330,6 +335,7 @@ const Calendar = () => {
 			</Container>								
 		  </Modal>					
         </div>
+		</>
     );
 };
 export default Calendar;

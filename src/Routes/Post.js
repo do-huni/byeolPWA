@@ -72,6 +72,9 @@ const modules = {
       	<Button variant="dark" size="lg" style ={{margin: "10px 0"}} onClick = {()=>{
 				  byeolDB.updateItem(selectedclName,title,value,()=>{navigate('/')})
 			  }}>작성하기</Button>		  
+      	<Button variant="dark" size="lg" style ={{margin: "10px 0"}} onClick = {()=>{
+				  byeolDB.getJSON().then((result)=>console.log(result));
+			  }}>테스트</Button>		  		  
 	  </div>
     </Form>
 </Container>		  

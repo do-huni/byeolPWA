@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import { ko } from "date-fns/esm/locale";
 import ReactQuill from 'react-quill';
 import "../assets/styles/quillbubble.css"
+import Loading from './Loading.js';
 
 function DDetail(){
     const dispatch = useDispatch();	
@@ -28,20 +29,25 @@ function DDetail(){
 	const [value, setValue] = useState("내용");
 	const [date, setDate] = useState("날짜");
 	const [emotion, setEmotion] = useState(1);
-	
+	const [loading, setLoading] = useState(true);
 	useEffect(()=>{
+		setLoading(true);
 		let selectedDiary = diaryList.filter(i => i.id == id)[0];
 		setValue(selectedDiary.content);
 		setDate(format(new Date(selectedDiary.date), 'yyyy년 MM월 dd일(EEE)', {locale: ko}));
 		setEmotion(selectedDiary.emotion);
+		setLoading(false);
 	})
 	
 const modules = {
       toolbar: false
 }	
 	
-	return(
-		<Container style = {{"margin": "10px auto"}}>
+	return(		
+		<>
+		{(loading)?(<Loading/>)
+		:
+		(<Container style = {{"margin": "10px auto"}}>
 			<Row><div className = {"postTitle"}>{date}</div></Row>	
 			
             <div className={[
@@ -69,8 +75,9 @@ const modules = {
 					  	byeolDB.deleteDiary(diaryDate,id, () => {navigate('/diary')})  					 											  
 					  }
 				  }}>삭제하기</Button>				
-		</Container>
-		
+		</Container>)
+		}	
+	</>
 	)
 }
 

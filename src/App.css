@@ -1,5 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
-
+@font-face{
+	font-family :'Nanum Pen Script';
+	font-display : block;	
+	src : local('Nanum Pen Script'),
+	url('./assets/styles/NanumPenScript-Regular.ttf');
+}
 .App {
   touch-action: pan-y;	
   text-align: center;
@@ -180,7 +184,7 @@ pre{
 
 .emotion_list_wrapper {
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: repeat(2, 50%);
   gap: 2%;
 }
 

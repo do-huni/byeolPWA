@@ -2,7 +2,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import * as byeolDB from '../Script/indexedDB.js'
 import { useDispatch, useSelector } from "react-redux"
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useLayoutEffect} from 'react';
 import {update, updateDiaryList} from "../store.js"
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import '../App.css';
@@ -11,6 +11,8 @@ import DiaryItem from './DiaryItem.js';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Loading from './Loading.js';
+
 //Quill
 import ReactQuill from 'react-quill';
 import "../assets/styles/quillsnow.css"
@@ -18,10 +20,12 @@ import "../assets/styles/quillsnow.css"
 
 function DList() {
   let navigate = useNavigate()		
+  const [loading, setLoading] = useState(true);
   let diaryDate = useSelector((state) => state.diaryDate);  
   let diaryList = useSelector((state) => state.diaryList);
   const dispatch = useDispatch();
   useEffect(()=>{
+	setLoading(true);		  	  
 	  byeolDB.getDiary(diaryDate).then((result)=>{
 // 		  result를 sorting?
 		  if(result != []){
@@ -38,6 +42,7 @@ function DList() {
 			  })			  
 		  }
 		  dispatch(updateDiaryList(result))
+		  setLoading(false);
 	  })
   },[diaryDate])
 
@@ -50,11 +55,14 @@ return (
 		  </Button>				
 	  </div>
 	<Container id = "diaryContainer" className = "g-0">	
-		{diaryList.map((it)=>{
+		{(loading)?
+			(<Loading/>)
+		:(diaryList.map((it)=>{
 			return(
 			<DiaryItem key ={it.id} {...it}/>
 			)
-		})}		
+		}))
+		}		
 	</Container>		  
 	</>
   ); 

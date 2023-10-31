@@ -940,5 +940,13 @@
   border: 1px solid #ccc;
 }
 .ql-container.ql-snow .ql-editor{
-  min-height: 40dvh !important;		
+  height: 40dvh !important;		
+}
+
+.ql-container.ql-snow {
+    height: auto;
+}
+.ql-editor {
+    /* height: 150px; */
+    overflow-y: scroll;
 }

@@ -2,6 +2,21 @@ import { configureStore, createSlice } from '@reduxjs/toolkit'
 import * as byeolDB from './Script/indexedDB.js'
 import { sub, format, add } from "date-fns";
 
+let user = createSlice({
+	name: 'user',
+	initialState: {
+		uid: "0",		
+		name: "익명",
+		email: "xxxx@gmail.com"		
+	},
+	reducers: {
+		updateUser(state, action){
+			let returnVal = action.payload;
+			return returnVal;			
+		}
+	}
+})
+
 let posts = createSlice({
 	name: 'posts',
 	initialState: [{
@@ -98,6 +113,7 @@ export let {updatePosts} = posts.actions;
 export let {updateTodos} = todos.actions;
 export let {edit} = diaryDate.actions;
 export let {updateDiaryList} = diaryList.actions;
+export let {updateUser} = user.actions;
 
 export default configureStore({
   reducer: {
@@ -105,6 +121,7 @@ export default configureStore({
 	  posts: posts.reducer,
 	  todos: todos.reducer,
 	  diaryList: diaryList.reducer,
-	  diaryDate: diaryDate.reducer
+	  diaryDate: diaryDate.reducer,
+	  user: user.reducer
   }
 }) 

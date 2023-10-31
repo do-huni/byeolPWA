@@ -1,5 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Single+Day&display=swap');
-
+@font-face{
+	font-family :'Single Day';
+	font-display : block;	
+	src : local('Single Day'),
+	url('./SingleDay-Regular.ttf');
+}
 .cell{
 	z-index: 1;
 	border: 0.4px solid #c4c4c4;
@@ -51,6 +55,7 @@ svg{
 
 .days{
 	flex-wrap: nowrap;
+	margin-bottom: 2px;
 	flex: 1 1 auto;
 	min-width: 0;
 	font-size: 0.8em;

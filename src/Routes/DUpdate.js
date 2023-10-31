@@ -95,7 +95,7 @@ const emotionList = [
   let [reload, setReload] = useState(0);
   const [value, setValue] = useState('');
   let [date, setDate] = useState(new Date());	
-  const [emotion, setEmotion] = useState(3);
+  const [emotion, setEmotion] = useState(1);
   let id = useParams().id;	
   let posts = useSelector((state)=>state.post);
   let diaryList = useSelector((state) => state.diaryList);	

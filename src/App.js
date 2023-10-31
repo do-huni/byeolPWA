@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import {useState, useEffect} from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
+import { fireStore } from "./FireBase.js";
 
 //import routes Component
 import Main from './Routes/Main.js'
@@ -14,6 +15,7 @@ import Diary from './Routes/Diary.js';
 import DPost from './Routes/DPost.js';
 import DDetail from './Routes/DDetail.js';
 import DUpdate from './Routes/DUpdate.js';
+import Loading from './Routes/Loading.js';
 
 //import bootstrap component
 import Container from 'react-bootstrap/Container';

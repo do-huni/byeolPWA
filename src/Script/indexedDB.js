@@ -1,8 +1,199 @@
 import { format } from "date-fns";
 
+const DBversion = 2;
+function upgrade(event){
+	console.log('upgradeneeded');
+	const db = event.target.result;
+	let oldVersion = event.oldVersion;
+	if(oldVersion<1){
+		const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
+		postStore.createIndex('clName', 'clName', {unique: true});
+		const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
+		const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
+		idStore.createIndex('access', 'access', {unique: true});								
+		const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
+		diaryStore.createIndex('hook', 'hook', {unique: true});	
+	}
+	if(oldVersion<2){
+		const userStore = db.createObjectStore("user", {keyPath: 'uid', autoIncrement: false});			
+	}
+}
+export function setUser(uid, email, name){
+	return new Promise((resolve, reject)=>{
+		
+	const dbReq = indexedDB.open('byeolDB',DBversion)
+	dbReq.addEventListener("success", function(event){
+		const db = event.target.result;				
+		const deleteStore = db.transaction('user', 'readwrite').objectStore('user');
+		const deleteReq = deleteStore.clear();
+		
+		deleteReq.addEventListener('success', function(r){
+			const userStore = db.transaction('user', 'readwrite').objectStore('user');
+			const user = {
+				uid: uid,
+				email: email,
+				name: name
+			};			
+			const req = userStore.put(user);	//end of putReq
+			resolve(user);			
+		});
+	})//end of dbReq success
+
+	dbReq.addEventListener("error", function(event){
+		const error = event.target.error;
+		console.log('error', error.name);
+	}); // end of error
+	dbReq.addEventListener("upgradeneeded", function(event){
+		upgrade(event);
+	}); //end of db req upgradeneeded									
+	})	//end of promise
+} //end of function	
+
+export function getUser(){
+	return new Promise((resolve, reject)=>{
+		
+	const dbReq = indexedDB.open('byeolDB',DBversion)
+	dbReq.addEventListener("success", function(event){
+		let returnVal = {uid: "", name: "", email: ""};		
+		const db = event.target.result;		
+		const readStore =db.transaction('user', 'readwrite').objectStore('user');
+		const readReq = readStore.getAll();
+		readReq.addEventListener("success", function(r){
+			// console.log(r.target.result);
+			if(r.target.result.length == 0){
+				const userAddStore = db.transaction('user', 'readwrite').objectStore('user');
+				const user = {
+					uid: "0",
+					email: "xxxx@gmail.com",
+					name: "익명"
+				};			
+				const req = userAddStore.put(user);	//end of putReq					
+			}
+			const userStore = db.transaction('user', 'readwrite').objectStore('user');
+			const req = userStore.getAll();	
+			req.addEventListener("success", function(result){			
+				resolve(result.target.result[0]);			
+			});		
+			
+		});					
+	})//end of dbReq success
+
+	dbReq.addEventListener("error", function(event){
+		const error = event.target.error;
+		console.log('error', error.name);
+	}); // end of error
+	dbReq.addEventListener("upgradeneeded", function(event){
+		upgrade(event);
+	}); //end of db req upgradeneeded									
+	})	//end of promise
+} //end of function	
+export function replaceAllData(parsedData){		
+	console.log(parsedData);
+	const dbReq = indexedDB.open('byeolDB',DBversion)
+	dbReq.addEventListener("success", function(event){
+		const db = event.target.result;		
+// 		db를 싹 비우기
+		const deleteUserStore = db.transaction('user', 'readwrite').objectStore('user');
+		const deleteUserReq = deleteUserStore.clear();
+		deleteUserReq.addEventListener('success', function(r){
+		const deleteIdStore = db.transaction('id', 'readwrite').objectStore('id');
+		const deleteIdReq = deleteIdStore.clear();
+		deleteIdReq.addEventListener('success', function(r){
+		const deleteTodoStore = db.transaction('todo', 'readwrite').objectStore('todo');
+		const deleteTodoReq = deleteTodoStore.clear();
+		deleteTodoReq.addEventListener('success', function(r){
+		const deleteDiaryStore = db.transaction('diary', 'readwrite').objectStore('diary');
+		const deleteDiaryReq = deleteDiaryStore.clear();
+		deleteDiaryReq.addEventListener('success', function(r){
+		const deletePostStore = db.transaction('post', 'readwrite').objectStore('post');
+		const deletePostReq = deletePostStore.clear();
+		deletePostReq.addEventListener('success', function(r){
+// 			for문 돌면서 쓰기. 비동기로 해도 될듯
+			for(let i = 0; i<parsedData.diary.length; i++){
+				const putDiaryStore =  db.transaction('diary', 'readwrite').objectStore('diary');
+				const putDiaryReq = putDiaryStore.add(parsedData.diary[i]);
+			}
+			for(let i = 0; i<parsedData.post.length; i++){
+				const putPostStore =  db.transaction('post', 'readwrite').objectStore('post');
+				const putPostReq = putPostStore.add(parsedData.post[i]);
+			}
+			for(let i = 0; i<parsedData.todo.length; i++){
+				const putTodoStore =  db.transaction('todo', 'readwrite').objectStore('todo');
+				const putTodoReq = putTodoStore.add(parsedData.todo[i]);
+			}
+			for(let i = 0; i<parsedData.id.length; i++){
+				const putIdStore =  db.transaction('id', 'readwrite').objectStore('id');
+				const putIdReq = putIdStore.add(parsedData.id[i]);
+			}
+			for(let i = 0; i<parsedData.user.length; i++){
+				const putUserStore =  db.transaction('user', 'readwrite').objectStore('user');
+				const putUserReq = putUserStore.add(parsedData.user[i]);
+			}			
+		});			
+		});			
+		});			
+		});			
+		});
+		
+		
+	});	//end of dbReq
+	dbReq.addEventListener("error", function(event){
+		const error = event.target.error;
+		console.log('error', error.name);
+	}); // end of error
+	dbReq.addEventListener("upgradeneeded", function(event){
+		upgrade(event);
+	}); //end of db req upgradeneeded				
+} //end of function		
+export function getJSON(){
+	return new Promise((resolve, reject)=>{
+		
+	const dbReq = indexedDB.open('byeolDB',DBversion)
+	dbReq.addEventListener("success", function(event){
+		let returnVal = {post: "", todo: "", id: "", diary: "", user: ""};		
+		const db = event.target.result;		
+		const postStore = db.transaction('post', 'readwrite').objectStore('post');			
+		let getAllPostData = postStore.getAll();
+		getAllPostData.addEventListener("success", function(post){
+			const todoStore = db.transaction('todo', 'readwrite').objectStore('todo');			
+			let getAllTodoData = todoStore.getAll();
+			getAllTodoData.addEventListener("success", function(todo){
+				const idStore = db.transaction('id', 'readwrite').objectStore('id');			
+				let getAllIdData = idStore.getAll();				
+				getAllIdData.addEventListener("success", function(id){
+					const diaryStore = db.transaction('diary', 'readwrite').objectStore('diary');			
+					let getAllDiaryData = diaryStore.getAll();				
+					getAllDiaryData.addEventListener("success", function(diary){
+						const userStore = db.transaction('user', 'readwrite').objectStore('user');
+						let getAllUserData = userStore.getAll();
+						getAllUserData.addEventListener("success", function(user){						
+							
+							returnVal["post"] = post.target.result;
+							returnVal["todo"] = todo.target.result;
+							returnVal["id"] = id.target.result;
+							returnVal["diary"] = diary.target.result;
+							returnVal["user"] = user.target.result;
+							
+							resolve(returnVal);								
+						})								
+					})//end of diary
+				});	//end of id				
+			}); //end of todo			
+		}); //end of post
+	})//end of dbReq success
+
+	dbReq.addEventListener("error", function(event){
+		const error = event.target.error;
+		console.log('error', error.name);
+	}); // end of error
+	dbReq.addEventListener("upgradeneeded", function(event){
+		upgrade(event);
+	}); //end of db req upgradeneeded				
+	})	//end of promise
+} //end of function	
 export function addItem(clName, color){
 	
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;
@@ -25,24 +216,13 @@ export function addItem(clName, color){
 		console.log('error', error.name);
 	});
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});											
-		} // end of if
-	});
+		upgrade(event);
+	}); //end of db req upgradeneeded		
 }
 
 export function updateItem(clName, title, content, callback){
 	let id;
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;
@@ -59,7 +239,7 @@ export function updateItem(clName, title, content, callback){
 						id : 1,
 						access: 'id'
 					})
-					console.log('complete')
+					// console.log('complete')
 					id = 1;
 
 				} else{
@@ -97,23 +277,12 @@ export function updateItem(clName, title, content, callback){
 		console.log('error', error.name);
 	}); // end of error
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});				
-		} // end of if
-	}); //end of db req upgradeneeded		
+		upgrade(event);
+	}); //end of db req upgradeneeded			
 } //end of function
 
 export function deleteItem(clName, id, callback){
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;		
@@ -150,25 +319,14 @@ export function deleteItem(clName, id, callback){
 		console.log('error', error.name);
 	}); // end of error
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});					
-		} // end of if
-	}); //end of db req upgradeneeded		
+		upgrade(event);
+	}); //end of db req upgradeneeded			
 } //end of function	
 
 export function getAll(ifName){
 	return new Promise((resolve, reject)=>{
 		
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
 		let returnVal = 1;		
 		const db = event.target.result;		
@@ -193,19 +351,8 @@ export function getAll(ifName){
 		console.log('error', error.name);
 	}); // end of error
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});						
-		} // end of if
-	}); //end of db req upgradeneeded			
+		upgrade(event);
+	}); //end of db req upgradeneeded					
 		
 		
 		
@@ -213,19 +360,19 @@ export function getAll(ifName){
 } //end of function	
 
 export function deleteClass(clName){
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;		
 		const postStore = db.transaction('post', 'readwrite').objectStore('post');			
 		const deleteReq = postStore.delete(clName);
 		deleteReq.addEventListener('success', function(e){
-			console.log(e)	
+			// console.log(e)	
 		}); //end of deleteReq
 		const todoStore = db.transaction('todo', 'readwrite').objectStore('todo');
 		const TdeleteReq = todoStore.delete(clName);
 		TdeleteReq.addEventListener("success", function(e1){
-			console.log(e1)
+			// console.log(e1)
 		})
 	})//end of dbReq success
 
@@ -234,24 +381,13 @@ export function deleteClass(clName){
 		console.log('error', error.name);
 	}); // end of error
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});					
-		} // end of if
-	}); //end of db req upgradeneeded		
+		upgrade(event);
+	}); //end of db req upgradeneeded			
 } //end of function	
 
 export function editItem(clName, title, content, id, callback){
 	
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;
@@ -282,7 +418,7 @@ export function editItem(clName, title, content, id, callback){
 
 export function addTodo(clName, id, checklist, dueDate, callback){
 	
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;		
@@ -296,7 +432,7 @@ export function addTodo(clName, id, checklist, dueDate, callback){
 					id : 1,
 					access: 'todoid'
 				})
-				console.log('complete')
+				// console.log('complete')
 				todoid = 1;
 
 			} else{
@@ -345,26 +481,15 @@ export function addTodo(clName, id, checklist, dueDate, callback){
 		console.log('error', error.name);
 	});
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});									
-		} // end of if
-	});
+		upgrade(event);
+	}); //end of db req upgradeneeded		
 }
 
 
 export function getTodoAll(){
 	return new Promise((resolve, reject)=>{
 		
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
 		let returnVal = 1;		
 		const db = event.target.result;		
@@ -381,22 +506,8 @@ export function getTodoAll(){
 		console.log('error', error.name);
 	}); // end of error
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});				
-		} // end of if
-	}); //end of db req upgradeneeded			
-		
-		
-		
+		upgrade(event);
+	}); //end of db req upgradeneeded							
 	})	//end of promise
 } //end of function	
 
@@ -415,7 +526,7 @@ put [...lists, obj]
 export function doneTodo(clName, id, todoID){
 	return new Promise((resolve, reject)=>{
 		
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;
 		const transaction = db.transaction('todo', 'readwrite');		
@@ -444,29 +555,15 @@ export function doneTodo(clName, id, todoID){
 		console.log('error', error.name);
 	}); // end of error
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});			
-		} // end of if
-	}); //end of db req upgradeneeded			
-		
-		
-		
+		upgrade(event);
+	}); //end of db req upgradeneeded								
 	})	//end of promise
 } //end of function	
 
 export function deleteTodo(clName, id, todoID){
 	return new Promise((resolve, reject)=>{
 		
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;
 		const transaction = db.transaction('todo', 'readwrite');		
@@ -494,22 +591,8 @@ export function deleteTodo(clName, id, todoID){
 		console.log('error', error.name);
 	}); // end of error
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});				
-		} // end of if
-	}); //end of db req upgradeneeded			
-		
-		
-		
+		upgrade(event);
+	}); //end of db req upgradeneeded		
 	})	//end of promise
 } //end of function	
 
@@ -517,7 +600,7 @@ export function deleteTodo(clName, id, todoID){
 //DiaryDB
 export function addDiary(hook, date, emotion, content, callback){
 	
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;		
 		let idStore = db.transaction("id", "readwrite").objectStore("id")
@@ -530,7 +613,7 @@ export function addDiary(hook, date, emotion, content, callback){
 					id : 1,
 					access: 'diaryid'
 				})
-				console.log('complete')
+				// console.log('complete')
 				diaryid = 1;
 
 			} else{
@@ -578,25 +661,13 @@ export function addDiary(hook, date, emotion, content, callback){
 		console.log('error', error.name);
 	});
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});								
-			
-		} // end of if
-	});
+		upgrade(event);
+	}); //end of db req upgradeneeded		
 }
 
 export function getDiary(hook){
 	return new Promise((resolve, reject)=>{	
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
 	const db = event.target.result;		
 		const diaryReadStore = db.transaction("diary", "readwrite").objectStore('diary');			
@@ -621,26 +692,14 @@ export function getDiary(hook){
 		console.log('error', error.name);
 	});
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});								
-			
-		} // end of if
-	});
+		upgrade(event);
+	}); //end of db req upgradeneeded		
 	}) // end of promise
 }
 
 export function editDiary(hook, id, content, date, emotion, callback){
 	
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;
 		const transaction = db.transaction('diary', 'readwrite');		
@@ -670,25 +729,13 @@ export function editDiary(hook, id, content, date, emotion, callback){
 		console.log('error', error.name);
 	});
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});								
-			
-		} // end of if
-	});
+		upgrade(event);
+	}); //end of db req upgradeneeded		
 }
 
 export function deleteDiary(hook, id, callback){
 	
-	const dbReq = indexedDB.open('byeolDB',1)
+	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;
 		const transaction = db.transaction('diary', 'readwrite');		
@@ -712,18 +759,6 @@ export function deleteDiary(hook, id, callback){
 		console.log('error', error.name);
 	});
 	dbReq.addEventListener("upgradeneeded", function(event){
-		console.log('upgradeneeded');
-		const db = event.target.result;
-		let oldVersion = event.oldVersion;
-		if(oldVersion<1){
-			const postStore = db.createObjectStore("post", {keyPath: 'clName', autoIncrement: false});
-			postStore.createIndex('clName', 'clName', {unique: true});
-			const todoStore = db.createObjectStore("todo", {keyPath: 'clName', autoIncrement: false});
-			const idStore = db.createObjectStore("id", {keyPath: 'access', autoIncrement: false});	
-			idStore.createIndex('access', 'access', {unique: true});								
-			const diaryStore = db.createObjectStore("diary", {keyPath: 'hook', autoIncrement: false});	
-			diaryStore.createIndex('hook', 'hook', {unique: true});								
-			
-		} // end of if
-	});
+		upgrade(event);
+	}); //end of db req upgradeneeded		
 }

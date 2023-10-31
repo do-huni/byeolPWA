@@ -42,9 +42,9 @@ const emotionList = [
         emotion_descript: '꿉꿉한'
     },
     {
-        emotion_id: 4,
-        emotion_img: process.env.PUBLIC_URL + `/img/img4.png`,
-        emotion_descript: "'8'"
+        emotion_id: 8,
+        emotion_img: process.env.PUBLIC_URL + `/img/img8.png`,
+        emotion_descript: "꼬시기"
     },
     {
         emotion_id: 5,
@@ -62,9 +62,9 @@ const emotionList = [
         emotion_descript: "GANG~!"
     },
     {
-        emotion_id: 8,
-        emotion_img: process.env.PUBLIC_URL + `/img/img8.png`,
-        emotion_descript: "꼬시기"
+        emotion_id: 4,
+        emotion_img: process.env.PUBLIC_URL + `/img/img4.png`,
+        emotion_descript: "'8'"
     },
     {
         emotion_id: 9,
@@ -95,7 +95,7 @@ const emotionList = [
   let [reload, setReload] = useState(0);
   const [value, setValue] = useState('');
   let [date, setDate] = useState(new Date());	
-  const [emotion, setEmotion] = useState(3);
+  const [emotion, setEmotion] = useState(1);
 
   const handleClickEmote = (emotion) => {
 	  setEmotion(emotion);

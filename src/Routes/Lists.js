@@ -27,10 +27,9 @@ function Lists() {
   const dispatch = useDispatch();	
   useEffect(()=>{
 	  byeolDB.getAll(true).then((result)=>dispatch(update(result)));
+	  byeolDB.getAll(false).then((result)=>dispatch(updatePosts(result)));	  
   },[reload])
-  useEffect(()=>{
-	  byeolDB.getAll(false).then((result)=>dispatch(updatePosts(result)));
-  },[reload])	
+
   useEffect(()=>{
 	  byeolDB.getAll(false).then((result)=>{
 								 if(selectedclName != 'all'){result = result.filter((i)=>i.clName == selectedclName);}

@@ -21,6 +21,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
 import ReactQuill from 'react-quill';
 import "../assets/styles/quillbubble.css"
+import Loading from './Loading.js';
 
 function Detail(){
     const dispatch = useDispatch();	
@@ -33,6 +34,7 @@ function Detail(){
 	let [test, setTest] = useState(1)
 	let [date, setDate] = useState("날짜")
   	let [todoDate, setTodoDate] = useState(new Date());		
+	const [loading, setLoading] = useState(true);
 	let clName = decodeURI(useParams().clName);
 	let id = useParams().id;	
   	let posts = useSelector((state)=>state.posts)	
@@ -41,6 +43,7 @@ const modules = {
       toolbar: false
 }	
   useEffect(()=>{		 
+	setLoading(true);
 	byeolDB.getAll(true).then((result) => dispatch(update(result)));
 	byeolDB.getAll(false).then((result)=>{
 		  						// console.log(result[1].clName == clName)		  
@@ -57,9 +60,11 @@ const modules = {
 		}
 		dispatch(updateTodos(result))
 	})
+	setLoading(false);
   },[reload])	
 	
   useEffect(()=>{
+	  setLoading(true);
 	  byeolDB.getAll(false).then((result)=>{
 		  						// console.log(result[1].clName == clName)		  
 								 result = result.filter((i)=>i.clName == clName);
@@ -67,7 +72,7 @@ const modules = {
 		  						 setTitle(curPost.title);//title띄어쓰기 문제!!
 		  						 setContent(curPost.content);		  
 		  						 setDate(curPost.date);		  		  
-		  						 
+		  						 setLoading(false);
 	  })
   },[])	
 	
@@ -106,6 +111,10 @@ const modules = {
 	  return arr;
 	}
 	return(
+		<>
+		{
+		(loading)?(<Loading/>)
+		:(
 		<Container style = {{"margin": "10px auto"}}>
 			<Row><span className = {"postClass"}>#{clName}</span></Row>
 			<Row><div className = {"postTitle"}>{title}</div></Row>
@@ -153,7 +162,9 @@ const modules = {
 					  }
 				  }}>삭제하기</Button>				
 		</Container>
-		
+		)
+		}
+		</>
 	)
 }
 
