@@ -110,7 +110,7 @@ function Navbars(){
 			<Row style = {{margin: "10px 12px"}}>
 				<Button variant="outline-secondary" id="button-addon1" onClick = {()=>{
 						byeolDB.getJSON().then((result)=>{
-							console.log(result);
+							// console.log(result);
 							setDoc(doc(fireStore, "byeolDB", result.user[0].uid), {
 								diary: JSON.stringify(result.diary),
 								post: JSON.stringify(result.post),

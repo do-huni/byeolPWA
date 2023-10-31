@@ -88,7 +88,7 @@ export function getUser(){
 	})	//end of promise
 } //end of function	
 export function replaceAllData(parsedData){		
-	console.log(parsedData);
+	// console.log(parsedData);
 	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
 		const db = event.target.result;		
