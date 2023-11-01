@@ -9,6 +9,7 @@ import '../App.css';
 import Container from 'react-bootstrap/Container';
 import ReactQuill from 'react-quill';
 import "../assets/styles/quillsnow.css"
+import Loading from './Loading.js';
 
 function Post() {
   let navigate = useNavigate()
@@ -20,19 +21,21 @@ function Post() {
   let [reload, setReload] = useState(0);
   let [date, setDate] = useState("날짜")	
   const [value, setValue] = useState('');
-  
+  const [loading, setLoading] = useState(true);		
+
 	
   useEffect(()=>{	
+	setLoading(true);
 	byeolDB.getAll(true).then((result) => dispatch(update(result)));
 	byeolDB.getAll(false).then((result)=>{
 		  						// console.log(result[1].clName == clName)		  
 								 result = result.filter((i)=>i.clName == clName);
 		  						 const curPost = result[0].lists.filter((i)=> i.id == id)[0];
 		  						 setTitle(curPost.title);//title띄어쓰기 문제!!
-								 document.getElementById("titleInput").value = curPost.title;
 		  						 setValue(curPost.content);		  
 		  						 setDate(curPost.date);		  		  
-		  						 
+								 setTitle(curPost.title);		
+								 setLoading(false);				  						 
 	  })	
   },[reload])
 	
@@ -49,11 +52,13 @@ const modules = {
 }	
   return (
 	<>
+	{(loading)?(<Loading/>)
+	:		  
 	<Container style = {{"margin": "10px auto"}}>
       <InputGroup className="mb-3">
-        <Form.Control className = "shadow-none" style = {{'width': '60%'}} type="text" placeholder="글 제목" id = "titleInput" onChange={(e)=>{
+        <Form.Control className = "shadow-none" style = {{'width': '60%'}} type="text" placeholder="글 제목" id = "titleInput" defaultValue = {title} onChange={(e)=>{
 				  setTitle(e.target.value);
-			  }} />
+			  }}/>
 	  </InputGroup>
 	  
  	 <ReactQuill 
@@ -72,6 +77,7 @@ const modules = {
 	  </div>
     </Form>
 </Container>		  
+}
 	</>
   );
 }

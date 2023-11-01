@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/byeolPWA/static/css/main.e4566c9c.css",
-    "main.js": "/byeolPWA/static/js/main.6672c428.js",
+    "main.js": "/byeolPWA/static/js/main.d35aa000.js",
     "static/js/787.50cf410d.chunk.js": "/byeolPWA/static/js/787.50cf410d.chunk.js",
     "static/media/NanumPenScript-Regular.ttf": "/byeolPWA/static/media/NanumPenScript-Regular.124b3244c7b453983cb5.ttf",
     "static/media/SingleDay-Regular.ttf": "/byeolPWA/static/media/SingleDay-Regular.b78b535a0525794dd2ad.ttf",
@@ -9,11 +9,11 @@
     "service-worker.js": "/byeolPWA/service-worker.js",
     "index.html": "/byeolPWA/index.html",
     "main.e4566c9c.css.map": "/byeolPWA/static/css/main.e4566c9c.css.map",
-    "main.6672c428.js.map": "/byeolPWA/static/js/main.6672c428.js.map",
+    "main.d35aa000.js.map": "/byeolPWA/static/js/main.d35aa000.js.map",
     "787.50cf410d.chunk.js.map": "/byeolPWA/static/js/787.50cf410d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e4566c9c.css",
-    "static/js/main.6672c428.js"
+    "static/js/main.d35aa000.js"
   ]
 }

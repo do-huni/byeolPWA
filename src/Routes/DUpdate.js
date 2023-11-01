@@ -14,6 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Container from 'react-bootstrap/Container';
 import EmotionItem from './EmotionItem.js';
+import Loading from './Loading.js';
 
 //Quill
 import ReactQuill from 'react-quill';
@@ -21,7 +22,7 @@ import "../assets/styles/quillsnow.css"
 
 
 function DUpdate() {
-	
+const [loading, setLoading] = useState(true);		
 const env = process.env;
 env.PUBLIC_URL = env.PUBLIC_URL || "";
 
@@ -117,14 +118,18 @@ const modules = {
 }
 
 	useEffect(()=>{
+		setLoading(true);
 		let selectedDiary = diaryList.filter(i => i.id == id)[0];
 		setValue(selectedDiary.content);
 		setDate((new Date(selectedDiary.date)))
 		setEmotion(selectedDiary.emotion);
+		setLoading(false);
 	},[])
 	
   return (
 	<>
+	{(loading)?(<Loading/>)
+	:	  	  
 	<Container style = {{"margin": "10px auto"}}>
 	<Row><Col>일기 쓸 날짜</Col></Row>
 	<div className="mb-3 ioDP">
@@ -168,7 +173,8 @@ const modules = {
 			})}}
 		>수정하기</Button>			  
 	  </div>	  
-</Container>		  
+</Container>		 
+}
 	</>
   );
 }

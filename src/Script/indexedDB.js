@@ -88,6 +88,7 @@ export function getUser(){
 	})	//end of promise
 } //end of function	
 export function replaceAllData(parsedData){		
+	return new Promise((resolve, reject)=>{		
 	// console.log(parsedData);
 	const dbReq = indexedDB.open('byeolDB',DBversion)
 	dbReq.addEventListener("success", function(event){
@@ -112,23 +113,29 @@ export function replaceAllData(parsedData){
 			for(let i = 0; i<parsedData.diary.length; i++){
 				const putDiaryStore =  db.transaction('diary', 'readwrite').objectStore('diary');
 				const putDiaryReq = putDiaryStore.add(parsedData.diary[i]);
+				console.log("diary 로드 완료");
 			}
 			for(let i = 0; i<parsedData.post.length; i++){
 				const putPostStore =  db.transaction('post', 'readwrite').objectStore('post');
 				const putPostReq = putPostStore.add(parsedData.post[i]);
+				console.log("post 로드 완료");				
 			}
 			for(let i = 0; i<parsedData.todo.length; i++){
 				const putTodoStore =  db.transaction('todo', 'readwrite').objectStore('todo');
 				const putTodoReq = putTodoStore.add(parsedData.todo[i]);
+				console.log("todo 로드 완료");				
 			}
 			for(let i = 0; i<parsedData.id.length; i++){
 				const putIdStore =  db.transaction('id', 'readwrite').objectStore('id');
 				const putIdReq = putIdStore.add(parsedData.id[i]);
+				console.log("id 로드 완료");				
 			}
 			for(let i = 0; i<parsedData.user.length; i++){
 				const putUserStore =  db.transaction('user', 'readwrite').objectStore('user');
 				const putUserReq = putUserStore.add(parsedData.user[i]);
+				console.log("user 로드 완료");				
 			}			
+			resolve();
 		});			
 		});			
 		});			
@@ -144,6 +151,7 @@ export function replaceAllData(parsedData){
 	dbReq.addEventListener("upgradeneeded", function(event){
 		upgrade(event);
 	}); //end of db req upgradeneeded				
+	}) //end of promise		
 } //end of function		
 export function getJSON(){
 	return new Promise((resolve, reject)=>{

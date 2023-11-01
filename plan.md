@@ -23,12 +23,18 @@ ver2
 6. 안정성 강화 -> 텍스트에디터 툴바고정 본문 스크롤 v
 7. 게임 넣기?
 8. 메모기능
+heap
+node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
+확인
+늘리기
+export NODE_OPTIONS=--max_old_space_size=800
 
 "homepage": "https://do-huni.github.io/byeolPWA",
 
       <BrowserRouter basename={process.env.PUBLIC_URL}>
 npm run build
 npm run postbuild
+git add .
 git commit -am 'Add homepage'
 git push origin master
 git subtree push --prefix build/ origin gh-pages

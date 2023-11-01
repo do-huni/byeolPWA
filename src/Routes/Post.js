@@ -71,10 +71,7 @@ const modules = {
       <div className="d-grid gap-2">	 		  
       	<Button variant="dark" size="lg" style ={{margin: "10px 0"}} onClick = {()=>{
 				  byeolDB.updateItem(selectedclName,title,value,()=>{navigate('/')})
-			  }}>작성하기</Button>		  
-      	<Button variant="dark" size="lg" style ={{margin: "10px 0"}} onClick = {()=>{
-				  byeolDB.getJSON().then((result)=>console.log(result));
-			  }}>테스트</Button>		  		  
+			  }}>작성하기</Button>		  	  		  
 	  </div>
     </Form>
 </Container>		  

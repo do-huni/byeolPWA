@@ -14,6 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Container from 'react-bootstrap/Container';
 import EmotionItem from './EmotionItem.js';
+import Loading from './Loading.js';
 
 //Quill
 import ReactQuill from 'react-quill';
@@ -21,7 +22,7 @@ import "../assets/styles/quillsnow.css"
 
 
 function DPost() {
-	
+const [loading, setLoading] = useState(true);	
 const env = process.env;
 env.PUBLIC_URL = env.PUBLIC_URL || "";
 
@@ -98,7 +99,9 @@ const emotionList = [
   const [emotion, setEmotion] = useState(1);
 
   const handleClickEmote = (emotion) => {
+	  setLoading(true);
 	  setEmotion(emotion);
+	  setLoading(false);
   }	
   
 const modules = {
@@ -115,6 +118,8 @@ const modules = {
 	
   return (
 	<>
+	{(loading)?(<Loading/>)
+	:	  
 	<Container style = {{"margin": "10px auto"}}>
 	<Row><Col>일기 쓸 날짜</Col></Row>
 	<div className="mb-3 ioDP">
@@ -157,6 +162,7 @@ const modules = {
 		>작성하기</Button>			  
 	  </div>	  
 </Container>		  
+}
 	</>
   );
 }

@@ -142,13 +142,14 @@ const RenderCells = ({ currentMonth, selectedDate }) => {
 		return arr;
 	}
 	function printDiary(){
-		return(
+		return(			
 			<Container id = "diaryContainer" className = "modalss g-0">												
 			{diaryList.map((it)=>{
 				return(
 				<DiaryItem key ={it.id} {...it}/>
 				)
-			})}		
+			})
+			}		
 			</Container>
 		)
 	}

@@ -19,14 +19,16 @@ import { useDispatch, useSelector } from "react-redux"
 import * as byeolDB from '../Script/indexedDB.js'
 import {updateUser,update, updatePosts} from "../store.js"
 import { doc, setDoc, collection, getDoc } from "firebase/firestore"; 
+import Loading from './Loading.js';
 
 
 function Navbars(){
 	let navigate = useNavigate()
+	const [loadingOpen, setLoadingOpen] = useState(false);		
 	const [modalIsOpen, setModalIsOpen] = useState(false);	
 	const [userNameInput, setUserNameInput] = useState("");	
 	function getDBData(){
-		return new Promise(async (resolve, reject)=>{
+		return new Promise(async (resolve, reject)=>{			
 			const docRef = doc(fireStore, "byeolDB", user.uid);
 			const docSnap = await getDoc(docRef);						
 			if (docSnap.exists()) {
@@ -39,6 +41,8 @@ function Navbars(){
 	}
 	async function replaceData(parsedData){
 		await byeolDB.replaceAllData(parsedData);
+		console.log("실행 끝")
+		setLoadingOpen(false);
 		window.location.reload();
 	}
     let user = useSelector((state) => state.user);		
@@ -69,7 +73,27 @@ function Navbars(){
 		
         </Container>
       </Navbar>	
-		   
+	  <Modal isOpen={loadingOpen}
+			onRequestClose={()=>setLoadingOpen(true)}			  
+			ariaHideApp={false}	
+			style = {
+			{overlay: {zIndex: 1001,
+					   top:0,
+					   left:0
+					  },
+			content: {padding: "0",				
+    				  top: "50%",
+    				  left: "50%",		
+    				  transform: "translate(-50%, -50%)",						  
+    	              width: "240px",
+    			      height: "240px",						  
+					 }				   
+			}
+		}>
+		<Container>	
+			<Loading/>
+		</Container>								
+	  </Modal>			   
 	  <Modal isOpen={modalIsOpen}
 			onRequestClose={()=>setModalIsOpen(false)}			  
 			ariaHideApp={false}	
@@ -109,23 +133,35 @@ function Navbars(){
 			
 			<Row style = {{margin: "10px 12px"}}>
 				<Button variant="outline-secondary" id="button-addon1" onClick = {()=>{
-						byeolDB.getJSON().then((result)=>{
+  					  var ans = window.confirm("데이터를 업로드 하시겠습니까?");
+					  if(ans){
+						setLoadingOpen(true);
+						byeolDB.getJSON().then(async (result)=>{
 							// console.log(result);
-							setDoc(doc(fireStore, "byeolDB", result.user[0].uid), {
+							await setDoc(doc(fireStore, "byeolDB", result.user[0].uid), {
 								diary: JSON.stringify(result.diary),
 								post: JSON.stringify(result.post),
 								user: JSON.stringify(result.user),
 								id: JSON.stringify(result.id),
 								todo: JSON.stringify(result.todo)
-							}
-						);
-						});	
+							}).then((e)=>{
+								setLoadingOpen(false);								
+							})
+								.catch((e)=>{
+								alert("업로드 오류 발생");
+								alert(e);
+							});							
+						});							  
+					  }						
 						}}>
 				  <BsDatabaseFillUp style = {{marginLeft: 0}}/>UPLOAD
 				</Button>
 			</Row>
 			<Row style = {{margin: "10px 12px"}}>
 				<Button variant="outline-secondary" id="button-addon1" onClick = {()=>{
+  					  var ans = window.confirm("데이터를 다운로드 하시겠습니까? 기존 데이터를 덮어씁니다.");
+					  if(ans){
+						setLoadingOpen(true);
 						getDBData()
 							.then((result)=>{
 							let parsedData = {
@@ -135,11 +171,13 @@ function Navbars(){
 								id: JSON.parse(result.id),
 								todo: JSON.parse(result.todo)
 							};
-							replaceData(parsedData);
+							replaceData(parsedData);							
 						})
 							.catch(()=>{
 							alert("서버에 업로드된 데이터가 없습니다!");
-						});
+							setLoadingOpen(false);
+						});								  
+					  }										
 					  }}>
 				  <BsDatabaseFillDown style = {{marginLeft: 0}}/>DOWNLOAD
 				</Button>
@@ -179,6 +217,7 @@ function Navbars(){
 			}				
 			</Container>								
 	  </Modal>			   
+		   
 </>
 	)
 }
