@@ -108,31 +108,31 @@ export function replaceAllData(parsedData){
 		deleteDiaryReq.addEventListener('success', function(r){
 		const deletePostStore = db.transaction('post', 'readwrite').objectStore('post');
 		const deletePostReq = deletePostStore.clear();
-		deletePostReq.addEventListener('success', function(r){
+		deletePostReq.addEventListener('success', async function(r){
 // 			for문 돌면서 쓰기. 비동기로 해도 될듯
+			const putDiaryStore =  db.transaction('diary', 'readwrite').objectStore('diary');			
 			for(let i = 0; i<parsedData.diary.length; i++){
-				const putDiaryStore =  db.transaction('diary', 'readwrite').objectStore('diary');
-				const putDiaryReq = putDiaryStore.add(parsedData.diary[i]);
+				await putDiaryStore.add(parsedData.diary[i]);
 				console.log("diary 로드 완료");
 			}
+			const putPostStore =  db.transaction('post', 'readwrite').objectStore('post');			
 			for(let i = 0; i<parsedData.post.length; i++){
-				const putPostStore =  db.transaction('post', 'readwrite').objectStore('post');
-				const putPostReq = putPostStore.add(parsedData.post[i]);
+				await putPostStore.add(parsedData.post[i]);
 				console.log("post 로드 완료");				
 			}
+			const putTodoStore =  db.transaction('todo', 'readwrite').objectStore('todo');			
 			for(let i = 0; i<parsedData.todo.length; i++){
-				const putTodoStore =  db.transaction('todo', 'readwrite').objectStore('todo');
-				const putTodoReq = putTodoStore.add(parsedData.todo[i]);
+				await putTodoStore.add(parsedData.todo[i]);
 				console.log("todo 로드 완료");				
 			}
+			const putIdStore =  db.transaction('id', 'readwrite').objectStore('id');			
 			for(let i = 0; i<parsedData.id.length; i++){
-				const putIdStore =  db.transaction('id', 'readwrite').objectStore('id');
-				const putIdReq = putIdStore.add(parsedData.id[i]);
+				await putIdStore.add(parsedData.id[i]);
 				console.log("id 로드 완료");				
 			}
+			const putUserStore =  db.transaction('user', 'readwrite').objectStore('user');			
 			for(let i = 0; i<parsedData.user.length; i++){
-				const putUserStore =  db.transaction('user', 'readwrite').objectStore('user');
-				const putUserReq = putUserStore.add(parsedData.user[i]);
+				await putUserStore.add(parsedData.user[i]);
 				console.log("user 로드 완료");				
 			}			
 			resolve();

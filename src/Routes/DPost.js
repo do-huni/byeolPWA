@@ -99,9 +99,7 @@ const emotionList = [
   const [emotion, setEmotion] = useState(1);
 
   const handleClickEmote = (emotion) => {
-	  setLoading(true);
 	  setEmotion(emotion);
-	  setLoading(false);
   }	
   
 const modules = {
@@ -118,8 +116,6 @@ const modules = {
 	
   return (
 	<>
-	{(loading)?(<Loading/>)
-	:	  
 	<Container style = {{"margin": "10px auto"}}>
 	<Row><Col>일기 쓸 날짜</Col></Row>
 	<div className="mb-3 ioDP">
@@ -162,7 +158,6 @@ const modules = {
 		>작성하기</Button>			  
 	  </div>	  
 </Container>		  
-}
 	</>
   );
 }

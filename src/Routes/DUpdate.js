@@ -43,10 +43,10 @@ const emotionList = [
         emotion_descript: '꿉꿉한'
     },
     {
-        emotion_id: 4,
-        emotion_img: process.env.PUBLIC_URL + `/img/img4.png`,
-        emotion_descript: "'8'"
-    },
+        emotion_id: 8,
+        emotion_img: process.env.PUBLIC_URL + `/img/img8.png`,
+        emotion_descript: "꼬시기"
+    },	
     {
         emotion_id: 5,
         emotion_img: process.env.PUBLIC_URL + `/img/img5.png`,
@@ -63,10 +63,10 @@ const emotionList = [
         emotion_descript: "GANG~!"
     },
     {
-        emotion_id: 8,
-        emotion_img: process.env.PUBLIC_URL + `/img/img8.png`,
-        emotion_descript: "꼬시기"
-    },
+        emotion_id: 4,
+        emotion_img: process.env.PUBLIC_URL + `/img/img4.png`,
+        emotion_descript: "'8'"
+    },	
     {
         emotion_id: 9,
         emotion_img: process.env.PUBLIC_URL + `/img/img9.png`,

@@ -14,20 +14,21 @@ ver2
 1. 로딩화면 구현 v
 2. 폰트 프리로딩 v
 3. 이미지 프리로딩 v(gif preloading)
-4. 서버연동
- 1) 데이터 JSON으로 변형해서 업로드
- 2) JSON으로 변형된 데이터 다운로드
- 3) AWS 서버 열든 뭘로 열든 일단 업로드 할 장소 만들기
- 4) 나랑 한별이 데이터 공유하는 방법 구현 with 비밀번호
+4. 서버연동 v
+ 1) 데이터 JSON으로 변형해서 업로드 v
+ 2) JSON으로 변형된 데이터 다운로드 v
+ 3) AWS 서버 열든 뭘로 열든 일단 업로드 할 장소 만들기 => firebase v
+ 4) 나랑 한별이 데이터 공유하는 방법 구현 with 비밀번호 => 구현X 메모로 할까?
 5. 3주년 이벤트 화려하게
 6. 안정성 강화 -> 텍스트에디터 툴바고정 본문 스크롤 v
-7. 게임 넣기?
+7. 게임 넣기? XX
 8. 메모기능
+9. 입장 key 입력하기
 heap
 node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
 확인
 늘리기
-export NODE_OPTIONS=--max_old_space_size=800
+export NODE_OPTIONS=--max_old_space_size=1000
 
 "homepage": "https://do-huni.github.io/byeolPWA",
 

@@ -18,7 +18,7 @@ import { fireStore } from '../FireBase.js';
 import { useDispatch, useSelector } from "react-redux"
 import * as byeolDB from '../Script/indexedDB.js'
 import {updateUser,update, updatePosts} from "../store.js"
-import { doc, setDoc, collection, getDoc } from "firebase/firestore"; 
+import { doc, setDoc, collection, getDoc, query, getDocs, orderBy } from "firebase/firestore"; 
 import Loading from './Loading.js';
 
 
@@ -27,17 +27,129 @@ function Navbars(){
 	const [loadingOpen, setLoadingOpen] = useState(false);		
 	const [modalIsOpen, setModalIsOpen] = useState(false);	
 	const [userNameInput, setUserNameInput] = useState("");	
+	
 	function getDBData(){
 		return new Promise(async (resolve, reject)=>{			
 			const docRef = doc(fireStore, "byeolDB", user.uid);
 			const docSnap = await getDoc(docRef);						
+			const parsedData = {
+				diary: [],
+				user: [],
+				post: [],
+				todo: [],
+				id: []
+			};
 			if (docSnap.exists()) {
-				resolve(docSnap.data());
+				//userQuery
+				let down_user = JSON.parse(docSnap.data().user);				
+				const d_uid = down_user[0].uid;
+				parsedData["user"].push(down_user[0]);
+				//diaryQuery
+				const diaryQ = query(collection(fireStore, "byeolDB", d_uid, "diary"));
+				const diarySnap = await getDocs(diaryQ);				
+				diarySnap.forEach(async (doc) =>{
+					let lists = [];
+					const id = doc.id;
+					const data = doc.data();
+					const diaryListQ = query(collection(fireStore, "byeolDB", d_uid, "diary", id, "lists"));
+					const diaryListSnap = await getDocs(diaryListQ);
+					diaryListSnap.forEach((docList)=>{
+						const dl_data = docList.data();
+						lists.push(dl_data);
+					});
+					const diaryElement = {
+						"hook": data["hook"],
+						"lists": lists
+					};
+					parsedData["diary"].push(diaryElement);
+				});
+				//idQuery
+				const idQ = query(collection(fireStore, "byeolDB", d_uid, "id"));
+				const idSnap = await getDocs(idQ);
+				idSnap.forEach((doc) =>{
+					const id = doc.id;
+					const data = doc.data();
+					const idElement = {
+						"access": data["access"],
+						"id": data["id"]
+					};
+					parsedData["id"].push(idElement);					
+				})			
+				//postQuery
+				const postQ = query(collection(fireStore, "byeolDB", d_uid, "post"));
+				const postSnap = await getDocs(postQ);				
+				postSnap.forEach(async (doc) =>{
+					let lists = [];
+					const id = doc.id;
+					const data = doc.data();
+					const postListQ = query(collection(fireStore, "byeolDB", d_uid, "post", id, "lists"));
+					const postListSnap = await getDocs(postListQ);
+					postListSnap.forEach((docList)=>{
+						const dl_data = docList.data();
+						lists.push(dl_data);
+					});
+					const postElement = {
+						"clName": data["clName"],
+						"color": data["color"],
+						"lists": lists
+					};
+					parsedData["post"].push(postElement);
+				});				
+				//todoQuery
+				const todoQ = query(collection(fireStore, "byeolDB", d_uid, "todo"));
+				const todoSnap = await getDocs(todoQ);
+				todoSnap.forEach((doc) =>{
+					const id = doc.id;
+					const data = doc.data();
+					const todoElement = {
+						"clName": data["clName"],
+						"color": data["color"],
+						"lists": JSON.parse(data["lists"])
+					};
+					parsedData["todo"].push(todoElement);					
+				})						
+				resolve(parsedData);
 			} else {
 			  // docSnap.data() will be undefined in this case
 				reject();
 			}					
 		});	
+		
+	//데이터 일괄 삭제
+async function deleteCollection(db, collectionPath, batchSize) {
+  const collectionRef = db.collection(collectionPath);
+  const query = collectionRef.orderBy('__name__').limit(batchSize);
+
+  return new Promise((resolve, reject) => {
+    deleteQueryBatch(db, query, resolve).catch(reject);
+  });
+}
+
+async function deleteQueryBatch(db, query, resolve) {
+  const snapshot = await query.get();
+
+  const batchSize = snapshot.size;
+  if (batchSize === 0) {
+    // When there are no documents left, we are done
+    resolve();
+    return;
+  }
+
+  // Delete documents in a batch
+  const batch = db.batch();
+  snapshot.docs.forEach((doc) => {
+    batch.delete(doc.ref);
+  });
+  await batch.commit();
+
+  // Recurse on the next process tick, to avoid
+  // exploding the stack.
+  process.nextTick(() => {
+    deleteQueryBatch(db, query, resolve);
+  });
+}
+	
+
 	}
 	async function replaceData(parsedData){
 		await byeolDB.replaceAllData(parsedData);
@@ -137,15 +249,58 @@ function Navbars(){
 					  if(ans){
 						setLoadingOpen(true);
 						byeolDB.getJSON().then(async (result)=>{
-							// console.log(result);
+							//user 작성
 							await setDoc(doc(fireStore, "byeolDB", result.user[0].uid), {
-								diary: JSON.stringify(result.diary),
-								post: JSON.stringify(result.post),
-								user: JSON.stringify(result.user),
-								id: JSON.stringify(result.id),
-								todo: JSON.stringify(result.todo)
-							}).then((e)=>{
-								setLoadingOpen(false);								
+								user: JSON.stringify(result.user)
+							}).then(async (e)=>{
+
+								//diary 작성
+								for(let i of result.diary){
+									await setDoc(doc(fireStore, "byeolDB", result.user[0].uid, "diary", i.hook), {
+										"hook" : i.hook
+									});
+									//컬렉션 안만들어질 수 도 있음. 예외처리 주의!
+									for(let j of i.lists){
+										await setDoc(doc(collection(fireStore, "byeolDB", result.user[0].uid, "diary", i.hook, "lists"), String(j.id)), {
+											content: j.content,
+											date: j.date,
+											emotion:j.emotion,
+											id: j.id
+										});
+									}
+								}
+								//id 작성
+								for(let i of result.id){
+									await setDoc(doc(fireStore, "byeolDB", result.user[0].uid, "id", i.access), {
+										"access" : i.access,
+										"id": i.id
+									});
+								}
+								//post 작성
+								for(let i of result.post){
+									await setDoc(doc(fireStore, "byeolDB", result.user[0].uid, "post", i.clName), {
+										"clName" : i.clName,
+										"color": i.color
+									});
+									//컬렉션 안만들어질 수 도 있음. 예외처리 주의!
+									for(let j of i.lists){
+										await setDoc(doc(collection(fireStore, "byeolDB", result.user[0].uid, "post", i.clName, "lists"), String(j.id)), {
+											content: j.content,
+											date: j.date,
+											title: j.title,
+											id: j.id
+										});
+									}
+								}	
+								//todo 작성
+								for(let i of result.todo){
+									await setDoc(doc(fireStore, "byeolDB", result.user[0].uid, "todo", i.clName), {
+										"clName" : i.clName,
+										"color": i.color,
+										"lists": JSON.stringify(i.lists)
+									});
+								}
+								setLoadingOpen(false);
 							})
 								.catch((e)=>{
 								alert("업로드 오류 발생");
@@ -164,14 +319,8 @@ function Navbars(){
 						setLoadingOpen(true);
 						getDBData()
 							.then((result)=>{
-							let parsedData = {
-								diary: JSON.parse(result.diary),
-								post: JSON.parse(result.post),
-								user: JSON.parse(result.user),
-								id: JSON.parse(result.id),
-								todo: JSON.parse(result.todo)
-							};
-							replaceData(parsedData);							
+							console.log(result);
+							replaceData(result);
 						})
 							.catch(()=>{
 							alert("서버에 업로드된 데이터가 없습니다!");
