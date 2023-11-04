@@ -2,7 +2,7 @@
   "name": "byeol",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://do-huni.github.io/byeolPWA",	
+  "homepage": "https://do-huni.github.io/byeolPWA",
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
@@ -163,6 +163,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@iconify/react": "^4.1.1"
   }
 }

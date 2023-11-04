@@ -23,7 +23,7 @@ ver2
 6. 안정성 강화 -> 텍스트에디터 툴바고정 본문 스크롤 v
 7. 게임 넣기? XX
 8. 메모기능
-9. 입장 key 입력하기
+9. 입장 key 입력하기 v
 heap
 node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
 확인
