@@ -1,19 +1,20 @@
 {
   "files": {
-    "main.css": "/byeolPWA/static/css/main.e4566c9c.css",
-    "main.js": "/byeolPWA/static/js/main.410a68e6.js",
+    "main.css": "/byeolPWA/static/css/main.a13988f4.css",
+    "main.js": "/byeolPWA/static/js/main.349dc75e.js",
     "static/js/787.50cf410d.chunk.js": "/byeolPWA/static/js/787.50cf410d.chunk.js",
+    "static/media/Dongle-Regular.ttf": "/byeolPWA/static/media/Dongle-Regular.be19c2ab1576230dd28d.ttf",
     "static/media/NanumPenScript-Regular.ttf": "/byeolPWA/static/media/NanumPenScript-Regular.124b3244c7b453983cb5.ttf",
     "static/media/SingleDay-Regular.ttf": "/byeolPWA/static/media/SingleDay-Regular.b78b535a0525794dd2ad.ttf",
     "static/media/logo_copy0.png": "/byeolPWA/static/media/logo_copy0.67a7390d36722d1a8f1b.png",
     "service-worker.js": "/byeolPWA/service-worker.js",
     "index.html": "/byeolPWA/index.html",
-    "main.e4566c9c.css.map": "/byeolPWA/static/css/main.e4566c9c.css.map",
-    "main.410a68e6.js.map": "/byeolPWA/static/js/main.410a68e6.js.map",
+    "main.a13988f4.css.map": "/byeolPWA/static/css/main.a13988f4.css.map",
+    "main.349dc75e.js.map": "/byeolPWA/static/js/main.349dc75e.js.map",
     "787.50cf410d.chunk.js.map": "/byeolPWA/static/js/787.50cf410d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e4566c9c.css",
-    "static/js/main.410a68e6.js"
+    "static/css/main.a13988f4.css",
+    "static/js/main.349dc75e.js"
   ]
 }
