@@ -4,6 +4,18 @@
 	src : local('Nanum Pen Script'),
 	url('./assets/styles/NanumPenScript-Regular.ttf');
 }
+@font-face{
+	font-family :'Dongle';
+	font-display : block;	
+	src : local('Dongle'),
+	url('./assets/styles/Dongle-Regular.ttf');
+}
+@font-face{
+	font-family :'Black Han Sans';
+	font-display : block;	
+	src : local('Black Han Sans'),
+	url('./assets/styles/SingleDay-Regular.ttf');
+}
 .App {
   touch-action: pan-y;	
   text-align: center;
@@ -241,4 +253,39 @@ pre{
 .letter{
 	font-family: 'Nanum Pen Script', cursive;
 	font-size: 16pt;
+}
+
+#letterTable{
+	width: 100%;
+	
+}
+.letterDate{
+	font-size: 8pt;
+	color: #c2c2c2;
+	line-height: 8pt;	
+}
+.br1pxsolid{
+	border-right: 1px solid #c2c2c2;
+}
+.letterTHead{
+	background: #f3c5b6;
+	/* color: #aa5b42; */
+	font-size: 16pt;
+	font-family: "dongle", cursive;
+}
+.letterDetailTitle{
+	font-size: 22pt;
+	text-align: center;
+	margin: 5px 0 0px 0px;	
+	font-family: "Black Han Sans", cursive;	
+}
+.letterDetailDate{
+	font-size: 14pt;
+	text-align: right;
+	font-family: 'Nanum Pen Script', cursive;		
+}
+.letterClass{
+	font-size: 14pt;
+	text-align: left;
+	font-family: 'Nanum Pen Script', cursive;			
 }

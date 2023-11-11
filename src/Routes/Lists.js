@@ -23,6 +23,7 @@ function Lists() {
   let [selectedclName, setSelectedclName] = useState('all');		
   let [reload, setReload] = useState(0);	
   let [addclName, setAddclName] = useState('기타');	
+  let user = useSelector((state) => state.user);		
   
   const dispatch = useDispatch();	
   useEffect(()=>{

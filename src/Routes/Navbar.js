@@ -12,6 +12,7 @@ import Modal from 'react-modal';
 import React, { useState, useEffect } from 'react';
 import { BiSolidUser, BiSolidUserAccount, BiSolidLogIn, BiSolidLogOut } from "react-icons/bi";
 import { BsDatabaseFill, BsDatabaseFillUp, BsDatabaseFillDown } from "react-icons/bs";
+import { SiTinyletter } from "react-icons/si";
 import { FcGoogle } from "react-icons/fc";
 import { signInGoogle, signOut } from '../FireBaseAuth.js';
 import { fireStore } from '../FireBase.js';
@@ -181,7 +182,8 @@ async function deleteQueryBatch(db, query, resolve) {
             <Nav.Link onClick={()=>navigate('/post')}>post</Nav.Link>			  
             <Nav.Link onClick={()=>navigate('/diary')}>diary</Nav.Link>
           </Nav>		
-		  <IoSettingsOutline onClick={()=>setModalIsOpen(true)} style = {{marginLeft: 0, fontSize: "18pt"}}/>			
+		  <SiTinyletter	onClick = {()=>navigate('/letter')}  style = {{marginLeft: 0, fontSize: "18pt"}}/>
+		  <IoSettingsOutline onClick={()=>setModalIsOpen(true)} style = {{marginLeft: "4px", fontSize: "18pt"}}/>			
 		
         </Container>
       </Navbar>	

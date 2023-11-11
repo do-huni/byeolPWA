@@ -18,6 +18,7 @@ import { ko } from "date-fns/esm/locale";
 import ReactQuill from 'react-quill';
 import "../assets/styles/quillbubble.css"
 import Loading from './Loading.js';
+import { BsPencilFill, BsFillTrashFill } from "react-icons/bs";
 
 function DDetail(){
     const dispatch = useDispatch();	
@@ -67,14 +68,13 @@ const modules = {
 		 		modules = {modules}				
 			/>			
 			
-			<Button variant="primary" size="lg" style = {{margin: "5px"}} onClick = {() => navigate(`/diary/update/${id}`)}>수정하기</Button>
-			
-			<Button variant="dark" size="lg" style = {{margin: "5px"}} onClick = {()=>{
+			<BsPencilFill style = {{marginLeft: 0}} onClick = {() => navigate(`/diary/update/${id}`)}/>			
+			<BsFillTrashFill onClick = {()=>{
   					  var ans = window.confirm("삭제 하시겠습니까?");
 					  if(ans){
 					  	byeolDB.deleteDiary(diaryDate,id, () => {navigate('/diary')})  					 											  
 					  }
-				  }}>삭제하기</Button>				
+				  }}/>	
 		</Container>)
 		}	
 	</>

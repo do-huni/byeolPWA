@@ -29,7 +29,6 @@ function Post() {
 	
 const quillRef = useRef();
 const imageHandler = () => {
-  console.log('에디터에서 이미지 버튼을 클릭하면 이 핸들러가 시작됩니다!');
 
   // 1. 이미지를 저장할 input type=file DOM을 만든다.
   const input = document.createElement('input');
@@ -38,18 +37,19 @@ const imageHandler = () => {
   input.setAttribute('accept', 'image/*');
   input.click(); // 에디터 이미지버튼을 클릭하면 이 input이 클릭된다.
   // input이 클릭되면 파일 선택창이 나타난다.
-
   // input에 변화가 생긴다면 = 이미지를 선택
   input.addEventListener('change', async () => {
+    const editor = quillRef.current.getEditor(); // 에디터 객체 가져오기			  
     const file = input.files[0];
 	const storageRef = ref(storage, `img/${file.name}`);
 	const uploadTask = uploadBytes(storageRef, file);
-	
+    const range =  editor.getSelection();
+	editor.insertEmbed(range.index, "image", process.env.PUBLIC_URL +"/img/loading.gif");
+	  
 	uploadTask.then((snapshot)=>{
-      const editor = quillRef.current.getEditor(); // 에디터 객체 가져오기		
+		editor.deleteText(range.index, 1);		
 		getDownloadURL(snapshot.ref).then((downloadURL)=>{
 			console.log(downloadURL);
-      		const range = editor.getSelection();
       // 가져온 위치에 이미지를 삽입한다
       		editor.insertEmbed(range.index, 'image', downloadURL);			
 		})
@@ -72,7 +72,6 @@ const modules =  useMemo(() => {
 	},
 	}}
 }, []);
-	
   useEffect(()=>{
 	byeolDB.getAll(true).then((result) => dispatch(update(result)));
 	setSelectedclName(document.querySelector('.form-select').value)

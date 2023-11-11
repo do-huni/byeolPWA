@@ -1,3 +1,4 @@
+https://velog.io/@heather128/React-PWA%EC%97%90%EC%84%9C-%EC%95%8C%EB%A6%BC-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0
 # 오늘 한 것
 table css 디자인, colspan 추가
 DB에 색상 값 입력, table에 분류 별 색상 가시화
@@ -24,11 +25,31 @@ ver2
 7. 게임 넣기? XX
 8. 메모기능
 9. 입장 key 입력하기 v
+===
+ver3
+1. 질문하기!
+질문 등록을 하면
+덧글로 질문에 대답할 수 있음.
+질문에 대답을 하면 토큰을 받음. 이 토큰이 있어야 질문을 할 수 있음
+단, 자기가 쓴 질문에 대답하는 건 인정 x
+기본 토큰 3개 있음.
+질문이 도착했어요. 알림 가게 만들기
+db 구조
+글 쫘라락 10개씩 업로드 날짜 순으로 정렬
+{
+question: String,
+date: String,
+writer_name: String,
+writer_uid: String
+}
+lists: {uid: String, name: String, content: String}
+
+
 heap
 node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
 확인
 늘리기
-export NODE_OPTIONS=--max_old_space_size=1000
+export NODE_OPTIONS=--max_old_space_size=900
 
 "homepage": "https://do-huni.github.io/byeolPWA",
 

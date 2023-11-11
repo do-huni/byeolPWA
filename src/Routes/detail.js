@@ -17,7 +17,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { ko } from "date-fns/esm/locale";
-import { BsFillTrashFill } from "react-icons/bs";
+import { BsPencilFill, BsFillTrashFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
 import ReactQuill from 'react-quill';
 import "../assets/styles/quillbubble.css"
@@ -153,14 +153,14 @@ const modules = {
 					  }}>추가</Button>						
 				</InputGroup>
 			</Container>				
-			<Button variant="primary" size="lg" style = {{margin: "5px"}} onClick = {() => navigate(`/update/${clName}/${id}`)}>수정하기</Button>
+			<BsPencilFill style = {{marginLeft: 0}} onClick = {() => navigate(`/update/${clName}/${id}`)}/>
 			
-			<Button variant="dark" size="lg" style = {{margin: "5px"}} onClick = {()=>{
+			<BsFillTrashFill onClick = {()=>{
   					  var ans = window.confirm("삭제 하시겠습니까?");
 					  if(ans){
 					  	byeolDB.deleteItem(clName,id,	() => {navigate('/')})  						 											  
 					  }
-				  }}>삭제하기</Button>				
+				  }}/>	
 		</Container>
 		)
 		}

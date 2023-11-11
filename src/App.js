@@ -16,6 +16,10 @@ import DPost from './Routes/DPost.js';
 import DDetail from './Routes/DDetail.js';
 import DUpdate from './Routes/DUpdate.js';
 import Loading from './Routes/Loading.js';
+import Letter from './Routes/Letter.js';
+import LPost from './Routes/LPost.js';
+import LDetail from './Routes/LDetail.js';
+import LUpdate from './Routes/LUpdate.js';
 
 //import bootstrap component
 import Container from 'react-bootstrap/Container';
@@ -55,7 +59,20 @@ function App() {
 			}/>		
 		<Route path = "/diary/update/:id" element = {
 				<DUpdate/>
+			}/>			
+		<Route path = "/letter" element = {
+				<Letter/>
+			}/>			
+		<Route path = "/letter/post" element = {
+				<LPost/>
 			}/>				
+		<Route path = "/letter/:id" element = {
+				<LDetail/>
+			}/>		
+		<Route path = "/letter/update/:id" element = {
+				<LUpdate/>
+			}/>		
+	
 	</Routes>
 </Container>
 </div>

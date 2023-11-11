@@ -4,6 +4,22 @@
  * Copyright (c) 2014, Jason Chen
  * Copyright (c) 2013, salesforce.com
  */
+@font-face{
+	font-family :'Nanum Pen Script';
+	font-display : block;	
+	src : local('Nanum Pen Script'),
+	url('./NanumPenScript-Regular.ttf');
+}
+@font-face{
+	font-family :'Dongle';
+	font-display : block;	
+	src : local('Dongle'),
+	url('./Dongle-Regular.ttf');
+}
+#letterContainer .ql-container{
+	font-family: 'Dongle';
+	font-size: 22px;
+}
 .ql-container {
   box-sizing: border-box;
   font-family: Helvetica, Arial, sans-serif;
