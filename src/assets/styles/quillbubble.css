@@ -588,10 +588,11 @@
   text-decoration: underline;
 }
 .ql-bubble .ql-editor blockquote {
-  border-left: 4px solid #ccc;
+  border-left: 4px solid #71bc6d;
   margin-bottom: 5px;
   margin-top: 5px;
   padding-left: 16px;
+  background: #eeeeee;
 }
 .ql-bubble .ql-editor code,
 .ql-bubble .ql-editor pre {

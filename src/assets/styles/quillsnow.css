@@ -4,6 +4,16 @@
  * Copyright (c) 2014, Jason Chen
  * Copyright (c) 2013, salesforce.com
  */
+@font-face{
+	font-family :'Dongle';
+	font-display : block;	
+	src : local('Dongle'),
+	url('./Dongle-Regular.ttf');
+}
+#letterContainer .ql-container{
+	font-family: 'Dongle';
+	font-size: 22px;
+}
 [contenteditable] {
     -webkit-user-select: text;
     user-select: text;
@@ -603,10 +613,11 @@
   text-decoration: underline;
 }
 .ql-snow .ql-editor blockquote {
-  border-left: 4px solid #ccc;
+  border-left: 4px solid #71bc6d;
   margin-bottom: 5px;
   margin-top: 5px;
   padding-left: 16px;
+  background: #eeeeee;	
 }
 .ql-snow .ql-editor code,
 .ql-snow .ql-editor pre {
@@ -940,7 +951,7 @@
   border: 1px solid #ccc;
 }
 .ql-container.ql-snow .ql-editor{
-  height: 40dvh !important;		
+  height: 65dvh !important;		
 }
 
 .ql-container.ql-snow {

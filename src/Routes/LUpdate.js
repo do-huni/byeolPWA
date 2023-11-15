@@ -93,7 +93,7 @@ const modules =  useMemo(() => {
 	<>
 	{(loading)?(<Loading/>)
 	:		  
-	<Container style = {{"margin": "10px auto"}}>
+	<Container id = "letterContainer" style = {{"margin": "10px auto"}}>
       <InputGroup className="mb-3">
         <Form.Control className = "shadow-none" style = {{'width': '60%'}} type="text" placeholder="글 제목" id = "titleInput" defaultValue = {title} onChange={(e)=>{
 				  setTitle(e.target.value);
