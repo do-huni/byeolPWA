@@ -15,6 +15,9 @@ import Image from 'react-bootstrap/Image';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import '../App.css';
+import { doc,deleteDoc,  addDoc, setDoc, collection, getDoc, query, getDocs, orderBy, limit, startAfter} from "firebase/firestore"; 
+import { storage } from '../FireBase.js';
+import { fireStore } from '../FireBase.js';
 
 function Lists() {
   let navigate = useNavigate()	
@@ -27,21 +30,45 @@ function Lists() {
   
   const dispatch = useDispatch();	
   useEffect(()=>{
-	  byeolDB.getAll(true).then((result)=>dispatch(update(result)));
-	  byeolDB.getAll(false).then((result)=>dispatch(updatePosts(result)));	  
-  },[reload])
+	  async function fetchData(){
+		  let postClNameList = [];		  
+		  const postCol = collection(fireStore, 'byeolDB', user.uid, 'post');
+		  const postQ =  query(postCol); 		 
+		  const postSnap = await getDocs(postQ);
+		  let queriedPosts = postSnap.docs.map(async (docu) =>{			 
+				  let data = docu.data();				
+				  const postsCol = collection(fireStore, 'byeolDB', user.uid, 'post', data['clName'], 'lists');
+				  const postsQ =  query(postsCol); 	
+				  const postsSnap = await getDocs(postsQ);
+				  let items = postsSnap.docs.map(doc=>{
+					  return doc.data();
+				  });
+			      data['lists'] = items;	
+				  postClNameList = [...postClNameList, data['clName']];		
+			      return data;
+		 });		
+		  await Promise.all(queriedPosts).then((queriedPosts)=>{
+			  dispatch(updatePosts(queriedPosts));
+		  	  dispatch(update(postClNameList));
+		  });
 
-  useEffect(()=>{
-	  byeolDB.getAll(false).then((result)=>{
-								 if(selectedclName != 'all'){result = result.filter((i)=>i.clName == selectedclName);}
-								 dispatch(updatePosts(result))			  
-	  })
-  },[selectedclName])
+		  // byeolDB.getAll(true).then((result)=>dispatch(update(result)));
+		  // byeolDB.getAll(false).then((result)=>dispatch(updatePosts(result)));	  		  
+	  };
+	  fetchData();
+  },[reload, user])
+
+  // useEffect(()=>{
+  // byeolDB.getAll(false).then((result)=>{
+  // if(selectedclName != 'all'){result = result.filter((i)=>i.clName == selectedclName);}
+  // dispatch(updatePosts(result))			  
+  // })
+  // },[selectedclName])
 	
-  useEffect(()=>{
-	byeolDB.getAll(true).then((result) => dispatch(update(result)));
-	setSelectedclName(document.querySelector('.form-select').value)
-  },[reload])	
+	// useEffect(()=>{
+	// byeolDB.getAll(true).then((result) => dispatch(update(result)));
+	// setSelectedclName(document.querySelector('.form-select').value)
+	// },[reload])	
   function printList(){
 	  let arr = []
 	  if(posts.length>0){
@@ -91,16 +118,26 @@ function Lists() {
 				  setAddclName(e.target.value);				  
 			  }}			
         />
-        <Button variant="outline-secondary" id="button-addon1" onClick = {()=>{
+        <Button variant="outline-secondary" id="button-addon1" onClick = {async ()=>{
 				  const color = document.getElementById("exampleColorInput").value;
-				  byeolDB.addItem(addclName, color)
+				  await setDoc(doc(fireStore, "byeolDB", user.uid, "post", addclName),{
+					  clName: addclName,
+					  color: color,
+					  lists: []
+				  });						  
+				  await setDoc(doc(fireStore, "byeolDB", user.uid, "todo", addclName),{
+					  clName: addclName,
+					  color: color,
+					  lists: JSON.stringify([])
+				  });						  		  
 				  setReload(reload+1);		  
 				  document.getElementById("classInput").value = "";	
 			  }}>
           추가하기
         </Button>
-        <Button variant="outline-secondary" id="button-addon2" onClick = {()=>{
-				  byeolDB.deleteClass(addclName);
+        <Button variant="outline-secondary" id="button-addon2" onClick = {async ()=>{
+				  const docRef = doc(fireStore, "byeolDB", user.uid, "post", addclName);		
+				  const deleteQ = await deleteDoc(docRef);						  
 				  setReload(reload+1);			
 				  document.getElementById("classInput").value = "";					  
 			  }}>

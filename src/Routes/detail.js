@@ -22,6 +22,9 @@ import { BiCalendarCheck } from "react-icons/bi";
 import ReactQuill from 'react-quill';
 import "../assets/styles/quillbubble.css"
 import Loading from './Loading.js';
+import { doc, deleteDoc, addDoc, setDoc, collection, getDoc, query, getDocs, orderBy, limit, startAfter} from "firebase/firestore"; 
+import { storage } from '../FireBase.js';
+import { fireStore } from '../FireBase.js';
 
 function Detail(){
     const dispatch = useDispatch();	
@@ -34,6 +37,7 @@ function Detail(){
 	let [test, setTest] = useState(1)
 	let [date, setDate] = useState("날짜")
   	let [todoDate, setTodoDate] = useState(new Date());		
+	let user = useSelector((state) => state.user);	
 	const [loading, setLoading] = useState(true);
 	let clName = decodeURI(useParams().clName);
 	let id = useParams().id;	
@@ -42,39 +46,33 @@ function Detail(){
 const modules = {
       toolbar: false
 }	
-  useEffect(()=>{		 
+  useEffect(()=>{		 	  
 	setLoading(true);
-	byeolDB.getAll(true).then((result) => dispatch(update(result)));
-	byeolDB.getAll(false).then((result)=>{
-		  						// console.log(result[1].clName == clName)		  
-								 result = result.filter((i)=>i.clName == clName);
-		  						 const curPost = result[0].lists.filter((i)=> i.id == id)[0];
-		  						 
-	  })
-	byeolDB.getTodoAll().then((result)=>{
-		result = result.find(el=> el.clName == clName)
-		if(result.lists.find(el => el.id == id)){
-		   result = result.lists.find(el => el.id == id).todos
+	async function fetchData(){
+		const docRef = doc(fireStore, "byeolDB", user.uid, "post", clName, "lists", id);
+		const docSnap = await getDoc(docRef);
+		const docData = docSnap.data();
+		console.log(docData);
+		const todoRef = doc(fireStore, "byeolDB", user.uid, "todo", clName);
+		const todoSnap = await getDoc(todoRef);
+		let todoData = todoSnap.data();
+		console.log(todoData);
+		todoData["lists"] = JSON.parse(todoData["lists"]);
+		if(todoData.lists.find(el => el.id == id)){
+		   todoData = todoData.lists.find(el => el.id == id).todos
 		} else{
-			result = 0
+			todoData = 0
 		}
-		dispatch(updateTodos(result))
-	})
-	setLoading(false);
+		dispatch(updateTodos(todoData))
+		
+		setTitle(docData.title);
+	 	setContent(docData.content);		  
+	 	setDate(docData.date);		  		  
+	 	setLoading(false);
+	}
+	fetchData();
   },[reload])	
 	
-  useEffect(()=>{
-	  setLoading(true);
-	  byeolDB.getAll(false).then((result)=>{
-		  						// console.log(result[1].clName == clName)		  
-								 result = result.filter((i)=>i.clName == clName);
-		  						 const curPost = result[0].lists.filter((i)=> i.id == id)[0];
-		  						 setTitle(curPost.title);//title띄어쓰기 문제!!
-		  						 setContent(curPost.content);		  
-		  						 setDate(curPost.date);		  		  
-		  						 setLoading(false);
-	  })
-  },[])	
 	
 	function printTodos(){
 	  let arr = []
@@ -90,16 +88,32 @@ const modules = {
 							type="checkbox"
 							id = {i.id}
 							checked = {i.ifChecked}
-							onChange={() => byeolDB.doneTodo(clName, id, i.id).then((result) =>{
-								setReload(reload+1);
-							})}							
+							onChange={async () => {
+							const todoRef = doc(fireStore, "byeolDB", user.uid, "todo", clName);
+							const todoSnap = await getDoc(todoRef);
+							let todoData = todoSnap.data();
+							todoData["lists"] = JSON.parse(todoData["lists"]);
+							todoData.lists.find(el => el.id == id).todos.find(el => el.id == i.id).ifChecked = !todoData.lists.find(el => el.id == id).todos.find(el => el.id == i.id).ifChecked;								
+							todoData["lists"] = JSON.stringify(todoData["lists"]);
+						    await setDoc(doc(fireStore, "byeolDB", user.uid, "todo", clName),todoData);	
+						   setReload(reload+1);									
+							}
+							}					
 						  />
 					  </Col>
-					<Col xs="auto"><div onClick = {()=>
-												  byeolDB.deleteTodo(clName, id, i.id).then((result)=>{
-						setReload(reload+1);
-					})
-												  }><BsFillTrashFill/></div></Col>					  
+					<Col xs="auto"><div onClick = {async ()=>{
+							const todoRef = doc(fireStore, "byeolDB", user.uid, "todo", clName);
+							const todoSnap = await getDoc(todoRef);
+							let todoData = todoSnap.data();
+							todoData["lists"] = JSON.parse(todoData["lists"]);
+							const todoIndex = todoData.lists.find(el => el.id == id).todos.findIndex(el => el.id == i.id);
+						    console.log(todoIndex);
+							todoData.lists.find(el => el.id == id).todos.splice(todoIndex, 1);								
+							todoData["lists"] = JSON.stringify(todoData["lists"]);
+						    await setDoc(doc(fireStore, "byeolDB", user.uid, "todo", clName),todoData);	
+						    setReload(reload+1);										
+							}
+					}><BsFillTrashFill/></div></Col>					  
 				  </Row>
 				  <Row className = "clstRow">
 				  	<Col xs="auto" key = {i.due+i.id}>{i.dueDate}</Col>					  					  
@@ -145,20 +159,51 @@ const modules = {
 				<Form.Control aria-label="Last name" id = "todoInput" className = "shadow-none" type="text" placeholder="할 일" onChange={(e)=>{
 						  setTodo(e.target.value);
 					  }} />				
-				<Button variant="dark" onClick = {()=>{
-						  byeolDB.addTodo(clName,id,todo,format(todoDate, "yyyy-MM-dd"),()=>{
-										  document.getElementById("todoInput").value = "";
-										  setReload(reload+1);				          	  
-						  })
+				<Button variant="dark" onClick = {async ()=>{			
+							const idRef = doc(fireStore, "byeolDB", user.uid, "id", "todoid");
+							const idSnap = await getDoc(idRef);
+							let idData = idSnap.data();		
+						    if(idData == undefined){
+							    idData = {
+							  	    "access": "todo",
+								    "id": 0
+							    };
+						    };							
+							idData.id += 1;
+							const todoRef = doc(fireStore, "byeolDB", user.uid, "todo", clName);
+							const todoSnap = await getDoc(todoRef);
+							let todoData = todoSnap.data();
+							console.log(todoData);
+							todoData["lists"] = JSON.parse(todoData["lists"]);
+							if(!todoData.lists.find(el => el.id == id)){
+								todoData.lists.push({
+									id: id,
+									todos: []
+								});								
+							}
+							todoData.lists.find(el => el.id == id).todos.push({
+								id: idData.id,
+								checklist: todo,
+								ifChecked: false,
+								dueDate: format(todoDate, "yyyy-MM-dd")								
+							});								
+							todoData["lists"] = JSON.stringify(todoData["lists"]);
+						    await setDoc(doc(fireStore, "byeolDB", user.uid, "todo", clName),todoData);	
+							await setDoc(doc(fireStore, "byeolDB", user.uid, "id", "todoid"), idData);
+						   document.getElementById("todoInput").value = "";
+						   setReload(reload+1);								
+
 					  }}>추가</Button>						
 				</InputGroup>
 			</Container>				
 			<BsPencilFill style = {{marginLeft: 0}} onClick = {() => navigate(`/update/${clName}/${id}`)}/>
 			
-			<BsFillTrashFill onClick = {()=>{
+			<BsFillTrashFill onClick = {async ()=>{
   					  var ans = window.confirm("삭제 하시겠습니까?");
 					  if(ans){
-					  	byeolDB.deleteItem(clName,id,	() => {navigate('/')})  						 											  
+						  const docRef = doc(fireStore, "byeolDB", user.uid, "post", clName, "lists", id);		
+						  const deleteQ = await deleteDoc(docRef);						 											  
+						  navigate('/');						  
 					  }
 				  }}/>	
 		</Container>

@@ -11,11 +11,12 @@ import Container from 'react-bootstrap/Container';
 import ReactQuill from 'react-quill';
 import "../assets/styles/quillsnow.css"
 //fb
-import { doc, setDoc, collection, getDoc, query, getDocs, orderBy,  } from "firebase/firestore"; 
 import { storage } from '../FireBase.js';
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {useRef, useMemo} from 'react';
-
+import { format } from "date-fns";
+import { doc, deleteDoc, addDoc, setDoc, collection, getDoc, query, getDocs, orderBy, limit, startAfter} from "firebase/firestore"; 
+import { fireStore } from '../FireBase.js'
 
 function Post() {
   let navigate = useNavigate()		
@@ -26,6 +27,7 @@ function Post() {
   let [title, setTitle] = useState('제목없음');
   let [reload, setReload] = useState(0);
   const [value, setValue] = useState('');
+  let user = useSelector((state) => state.user);	
 	
 const quillRef = useRef();
 const imageHandler = () => {
@@ -73,7 +75,7 @@ const modules =  useMemo(() => {
 	}}
 }, []);
   useEffect(()=>{
-	byeolDB.getAll(true).then((result) => dispatch(update(result)));
+	
 	setSelectedclName(document.querySelector('.form-select').value)
   },[reload])
 	
@@ -110,8 +112,26 @@ const modules =  useMemo(() => {
 	
 	
       <div className="d-grid gap-2">	 		  
-      	<Button variant="dark" size="lg" style ={{margin: "10px 0"}} onClick = {()=>{
-				  byeolDB.updateItem(selectedclName,title,value,()=>{navigate('/')})
+      	<Button variant="dark" size="lg" style ={{margin: "10px 0"}} onClick = {async ()=>{
+				  const idRef = doc(fireStore, "byeolDB", user.uid, "id", "id");
+				  const idSnap = await getDoc(idRef);
+				  let idData = idSnap.data();						
+
+				  if(idData == undefined){
+					  idData = {
+						  "access": "id",
+						  "id": 0
+					  };
+				  }
+				  idData.id += 1;				  
+				  await setDoc(doc(fireStore, "byeolDB", user.uid, "post", selectedclName, "lists", String(idData.id)),{
+					  content: value,
+					  date: format(new Date(), "yyyy.MM.dd HH:mm:ss"),
+					  title: title,
+					  id: idData.id
+				  });				  
+				  await setDoc(doc(fireStore, "byeolDB", user.uid, "id", "id"), idData);
+				  navigate('/')				  
 			  }}>작성하기</Button>		  	  		  
 	  </div>
     </Form>
